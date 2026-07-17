@@ -484,8 +484,22 @@ function openElement(id){
 
 function ytEmbedId(url){
   if(!url) return null;
-  const m = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([\w-]{6,})/);
-  return m ? m[1] : null;
+  try{
+    const u = new URL(url.trim());
+    const host = u.hostname.replace(/^www\.|^m\./,'');
+    if(host === 'youtu.be'){
+      const seg = u.pathname.split('/').filter(Boolean)[0];
+      if(seg) return seg;
+    }
+    if(host === 'youtube.com' || host === 'youtube-nocookie.com'){
+      const v = u.searchParams.get('v');
+      if(v) return v;
+      const m = u.pathname.match(/\/(?:embed|shorts|live)\/([\w-]{6,})/);
+      if(m) return m[1];
+    }
+  }catch(e){ /* not a valid URL object, fall through to regex below */ }
+  const m2 = url.match(/[?&]v=([\w-]{6,})/) || url.match(/(?:youtu\.be\/|\/(?:embed|shorts|live)\/)([\w-]{6,})/);
+  return m2 ? m2[1] : null;
 }
 function mediaHtml(ex){
   const type = ex.mediaType || 'image';
