@@ -470,6 +470,26 @@ function openElement(id){
   SS('s-element');
 }
 
+function ytEmbedId(url){
+  if(!url) return null;
+  const m = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([\w-]{6,})/);
+  return m ? m[1] : null;
+}
+function mediaHtml(ex){
+  const type = ex.mediaType || 'image';
+  const url = ex.gifUrl;
+  if(!url) return '<i class="ti ti-photo" style="color:#444;font-size:26px"></i>';
+  if(type === 'video'){
+    return `<video src="${url}" muted loop autoplay playsinline style="width:100%;height:100%;object-fit:cover"></video>`;
+  }
+  if(type === 'youtube'){
+    const id = ytEmbedId(url);
+    if(id) return `<iframe src="https://www.youtube.com/embed/${id}" style="width:100%;height:100%;border:0" allow="autoplay;encrypted-media" allowfullscreen></iframe>`;
+    return '<i class="ti ti-brand-youtube" style="color:#ff0033;font-size:26px"></i>';
+  }
+  return `<img src="${url}" alt="">`;
+}
+
 function exCard(ex,idx){
   const name = exField(ex,'name');
   const desc = exField(ex,'desc');
@@ -484,7 +504,7 @@ function exCard(ex,idx){
       <div class="diff-badge ${diff.cls}">${diff[lang]}</div>
     </div>
     <div class="ex-body">
-      <div class="ex-gif">${ex.gifUrl?`<img src="${ex.gifUrl}" alt="${name}">`:'<i class="ti ti-photo" style="color:#444;font-size:26px"></i>'}</div>
+      <div class="ex-gif">${mediaHtml(ex)}</div>
       <div class="ex-info">
         ${ex.reps?`<span class="ex-reps">${ex.reps}</span>`:''}
         ${desc?`<div class="ex-desc">${desc}</div>`:''}
