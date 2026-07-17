@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>LEVEL UP — Calisthenics</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.14.0/dist/tabler-icons.min.css">
+<script src="https://accounts.google.com/gsi/client" async defer onload="window.__gisReady=true"></script>
+<style>
+:root{
+  --bg:#121317;
+  --surface:#1b1d23;
+  --surface2:#22252c;
+  --border:#2c2f37;
+  --text:#f2f1ec;
+  --muted:#8b8e97;
+  --gold:#f2b134;
+  --gold-dim:#7a5b1c;
+  --easy:#3ecf6e;
+  --easy-bg:#12291d;
+  --norm:#c98a4b;
+  --norm-bg:#2b1f14;
+  --hard:#ef4a4a;
+  --hard-bg:#2c1414;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:#000;min-height:100vh}
+.app{max-width:480px;margin:0 auto;min-height:100vh;background:var(--bg);position:relative;color:var(--text);overflow:hidden}
+.screen{display:none;min-height:100vh;padding-bottom:2rem}
+.screen.active{display:block}
+h1,h2,h3,.disp{font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.02em}
+
+/* TOPBAR */
+.tb{background:var(--surface);border-bottom:1px solid var(--border);padding:.85rem 1rem;display:flex;align-items:center;gap:.75rem;position:sticky;top:0;z-index:10}
+.tb-back{width:36px;height:36px;border-radius:10px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;background:var(--surface2);color:var(--text);font-size:18px;flex-shrink:0}
+.tb-title{font-family:'Oswald',sans-serif;font-size:16px;font-weight:600;color:var(--text);letter-spacing:.02em;text-transform:uppercase}
+.tb-sub{font-size:12px;color:var(--muted);margin-top:1px}
+
+/* LANG */
+.lang-bar{display:flex;justify-content:flex-end;padding:.5rem 1rem;gap:.4rem}
+.lang-btn{padding:.3rem .7rem;border:1px solid var(--border);border-radius:6px;font-size:11px;cursor:pointer;background:var(--surface);color:var(--muted);font-weight:600}
+.lang-btn.active{background:var(--gold);border-color:var(--gold);color:#1a1305}
+
+/* GATE / WELCOME */
+.gate-hero{background:radial-gradient(circle at 30% 0%,#22242c 0%,#121317 65%);padding:3rem 1.5rem 2rem;text-align:center;position:relative;border-bottom:1px solid var(--border)}
+.gate-badge{display:inline-flex;align-items:center;gap:6px;background:var(--gold);color:#1a1305;border-radius:20px;padding:5px 14px;font-size:11px;font-weight:700;margin-bottom:1.5rem;letter-spacing:.04em;text-transform:uppercase}
+.gate-h1{font-family:'Oswald',sans-serif;font-size:32px;font-weight:700;line-height:1.15;margin-bottom:.85rem;text-transform:uppercase}
+.gate-h1 span{color:var(--gold)}
+.gate-p{font-size:14px;color:var(--muted);line-height:1.7;max-width:340px;margin:0 auto}
+.gate-levels{display:flex;justify-content:center;gap:.5rem;padding:1.25rem 1rem;flex-wrap:wrap}
+.gl-chip{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:600;padding:5px 11px;border-radius:20px;border:1px solid var(--border)}
+.gl-dot{width:9px;height:9px;border-radius:50%}
+.gate-body{padding:1.5rem 1.25rem}
+.btn-gsi{display:flex;align-items:center;justify-content:center;gap:.65rem;width:100%;padding:.95rem;background:#fff;color:#1f1f1f;border:none;border-radius:12px;font-size:15px;font-weight:600;cursor:pointer;margin-bottom:1rem}
+.btn-gsi img{width:20px;height:20px}
+.gate-disc{font-size:11.5px;color:#5f636d;text-align:center;line-height:1.7}
+.gate-steps{display:flex;flex-direction:column;gap:.65rem;margin-bottom:1.1rem}
+.gs-item{display:flex;align-items:center;gap:.65rem;font-size:12.5px;color:#c3c5cb}
+.gs-num{width:22px;height:22px;border-radius:7px;background:var(--surface2);color:var(--gold);font-family:'Oswald',sans-serif;font-weight:700;font-size:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid var(--border)}
+
+/* LOCKED (needs subscribe) */
+.lock-wrap{padding:2.5rem 1.5rem;text-align:center}
+.lock-icon{width:74px;height:74px;border-radius:50%;background:var(--surface2);border:2px solid var(--hard);display:flex;align-items:center;justify-content:center;font-size:32px;margin:0 auto 1.25rem;color:var(--hard)}
+.lock-title{font-family:'Oswald',sans-serif;font-size:22px;font-weight:700;text-transform:uppercase;margin-bottom:.6rem}
+.lock-desc{font-size:14px;color:var(--muted);line-height:1.75;margin-bottom:1.75rem;max-width:340px;margin-left:auto;margin-right:auto}
+.lock-profile{display:flex;align-items:center;gap:.7rem;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:.7rem .9rem;margin-bottom:1.5rem;text-align:left}
+.lock-profile img{width:38px;height:38px;border-radius:50%}
+.lock-profile .pn{font-size:13px;font-weight:600}
+.lock-profile .pe{font-size:11px;color:var(--muted)}
+.btn-yt{display:flex;align-items:center;justify-content:center;gap:.6rem;width:100%;padding:.95rem;background:#ff0033;color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;margin-bottom:.75rem;text-decoration:none;text-transform:uppercase;letter-spacing:.02em}
+.btn-recheck{display:flex;align-items:center;justify-content:center;gap:.5rem;width:100%;padding:.85rem;background:var(--surface2);border:1px solid var(--border);color:var(--text);border-radius:12px;font-size:14px;font-weight:600;cursor:pointer;margin-bottom:.75rem}
+.btn-signout{background:none;border:none;color:var(--muted);font-size:12.5px;cursor:pointer;text-decoration:underline}
+
+/* HOME */
+.home-header{background:linear-gradient(160deg,#1c1e25,#121317);padding:1.5rem 1.25rem 1.25rem;border-bottom:1px solid var(--border)}
+.home-top{display:flex;align-items:center;gap:.85rem}
+.home-avatar{width:48px;height:48px;border-radius:50%;border:2px solid var(--gold);flex-shrink:0;object-fit:cover}
+.home-avatar-fallback{width:48px;height:48px;border-radius:50%;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.home-name{font-size:15px;font-weight:700}
+.home-tag{font-size:11.5px;color:var(--easy);margin-top:1px;display:flex;align-items:center;gap:4px;font-weight:600}
+.home-signout{margin-left:auto;width:34px;height:34px;border-radius:9px;background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--muted);cursor:pointer;flex-shrink:0}
+
+.section-lbl{font-family:'Oswald',sans-serif;font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;padding:1.1rem 1.25rem .5rem}
+.legend{display:flex;gap:.7rem;padding:0 1.25rem .75rem;flex-wrap:wrap}
+.leg-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted);font-weight:500}
+.leg-dot{width:9px;height:9px;border-radius:50%}
+
+.el-grid{display:grid;grid-template-columns:1fr 1fr;gap:.7rem;padding:0 1.25rem}
+.el-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1rem .9rem;cursor:pointer;transition:.15s;position:relative;overflow:hidden}
+.el-card:active{transform:scale(.97)}
+.el-card:hover{border-color:var(--gold)}
+.el-icon{font-size:30px;margin-bottom:.6rem;display:block}
+.el-name{font-family:'Oswald',sans-serif;font-size:14.5px;font-weight:600;text-transform:uppercase;letter-spacing:.01em;line-height:1.25;margin-bottom:.3rem}
+.el-count{font-size:11px;color:var(--muted)}
+.el-empty{grid-column:1/-1;text-align:center;padding:2.5rem 1rem;color:var(--muted);font-size:13px}
+
+.action-row{padding:1.25rem;display:grid;gap:.7rem}
+.btn-comp{display:flex;align-items:center;gap:.85rem;padding:1.05rem 1.1rem;background:linear-gradient(120deg,#1c2b4a,#16324a);border:1px solid #2a4a6b;border-radius:14px;cursor:pointer;text-decoration:none;color:var(--text)}
+.btn-comp .ic{width:44px;height:44px;border-radius:11px;background:#229ed9;display:flex;align-items:center;justify-content:center;font-size:21px;color:#fff;flex-shrink:0}
+.btn-comp .tt{font-size:14.5px;font-weight:700}
+.btn-comp .ds{font-size:11.5px;color:#9db3c9;margin-top:1px}
+.btn-faq{display:flex;align-items:center;gap:.85rem;padding:1.05rem 1.1rem;background:var(--surface);border:1px solid var(--border);border-radius:14px;cursor:pointer;color:var(--text)}
+.btn-faq .ic{width:44px;height:44px;border-radius:11px;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.btn-faq .tt{font-size:14.5px;font-weight:700}
+.btn-faq .ds{font-size:11.5px;color:var(--muted);margin-top:1px}
+.chev{margin-left:auto;color:#5b606b;flex-shrink:0}
+
+/* ELEMENT DETAIL */
+.el-hero{padding:1.5rem 1.25rem;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:1rem}
+.el-hero-icon{font-size:38px}
+.el-hero-name{font-family:'Oswald',sans-serif;font-size:19px;font-weight:700;text-transform:uppercase}
+.el-hero-count{font-size:12px;color:var(--muted);margin-top:2px}
+
+.ex-card{margin:.85rem 1.1rem 0;border:1px solid var(--border);border-radius:14px;overflow:hidden;background:var(--surface)}
+.ex-top{padding:.7rem 1rem;display:flex;align-items:center;gap:.6rem;border-bottom:1px solid var(--border)}
+.ex-step-num{width:24px;height:24px;border-radius:7px;background:var(--surface2);color:var(--gold);font-family:'Oswald',sans-serif;font-weight:700;font-size:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ex-name{font-size:14px;font-weight:700;flex:1}
+.diff-badge{font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:20px;text-transform:uppercase;letter-spacing:.03em;flex-shrink:0}
+.diff-easy{background:var(--easy-bg);color:var(--easy)}
+.diff-normal{background:var(--norm-bg);color:var(--norm)}
+.diff-hard{background:var(--hard-bg);color:var(--hard)}
+.ex-body{display:flex;gap:.9rem;padding:1rem}
+.ex-gif{width:112px;height:92px;border-radius:10px;background:#0d0e11;border:1px solid var(--border);flex-shrink:0;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.ex-gif img{width:100%;height:100%;object-fit:cover}
+.ex-info{flex:1;min-width:0}
+.ex-reps{font-size:11px;font-weight:700;color:var(--gold);background:rgba(242,177,52,.1);padding:2px 8px;border-radius:7px;display:inline-block;margin-bottom:.45rem}
+.ex-desc{font-size:12px;color:#c3c5cb;margin-bottom:.4rem;line-height:1.55}
+.ex-steps{font-size:12px;color:#a9acb4;line-height:1.75;padding-left:1rem}
+.ex-tip{margin-top:.55rem;font-size:11px;color:var(--easy);background:var(--easy-bg);border-radius:6px;padding:4px 8px;display:inline-block}
+.no-ex{text-align:center;padding:3rem 1.5rem;color:var(--muted);font-size:13.5px}
+
+/* FAQ */
+.faq-item{margin:.6rem 1.1rem 0;border:1px solid var(--border);border-radius:12px;overflow:hidden;background:var(--surface)}
+.faq-q{padding:.85rem 1rem;cursor:pointer;display:flex;justify-content:space-between;align-items:flex-start;gap:.75rem}
+.faq-q-text{font-size:13.5px;font-weight:600;flex:1;line-height:1.4}
+.faq-icon{font-size:16px;color:var(--gold);flex-shrink:0;transition:transform .2s}
+.faq-icon.open{transform:rotate(180deg)}
+.faq-a{display:none;padding:.6rem 1rem .9rem;font-size:13px;color:var(--muted);line-height:1.7;border-top:1px solid var(--border)}
+.faq-a.vis{display:block}
+.ask-card{margin:1.1rem;background:var(--surface);border-radius:14px;padding:1.25rem;border:1px solid var(--border)}
+.ask-title{font-size:13.5px;font-weight:700;margin-bottom:.75rem;display:flex;align-items:center;gap:6px}
+.ask-inp{width:100%;padding:.65rem .9rem;font-size:13.5px;border:1.5px solid var(--border);border-radius:9px;background:var(--surface2);color:var(--text);margin-bottom:.6rem;resize:vertical;min-height:75px;font-family:'Inter',sans-serif}
+.ask-inp:focus{outline:none;border-color:var(--gold)}
+.ask-email{width:100%;padding:.6rem .9rem;font-size:13.5px;border:1.5px solid var(--border);border-radius:9px;background:var(--surface2);color:var(--text);margin-bottom:.65rem;font-family:'Inter',sans-serif}
+.btn-send{width:100%;padding:.75rem;background:var(--gold);color:#1a1305;border:none;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer}
+.send-ok{text-align:center;padding:.75rem;color:var(--easy);font-size:13.5px;font-weight:600;display:none}
+
+/* SPINNER */
+.spinner{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:999;align-items:center;justify-content:center}
+.spinner.show{display:flex}
+.spin-box{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.5rem 2rem;text-align:center}
+.spin-icon{font-size:34px;margin-bottom:.5rem;animation:spin 1s linear infinite;display:inline-block;color:var(--gold)}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<div class="app" id="APP">
+
+<div class="lang-bar" id="lang-bar" style="display:none">
+  <button class="lang-btn active" id="lb-uz" onclick="setLang('uz')">UZ</button>
+  <button class="lang-btn" id="lb-ru" onclick="setLang('ru')">RU</button>
+</div>
+
+<!-- GATE (sign-in) -->
+<div class="screen active" id="s-gate">
+  <div class="gate-hero">
+    <div class="gate-badge">🔥 Calisthenics Levels</div>
+    <div class="gate-h1" id="g-h1">O'Z<br><span>DARAJANGNI</span><br>OSHIR</div>
+    <div class="gate-p" id="g-p">Handstand, Planche, Front Lever va boshqa elementlarni bosqichma-bosqich, videolar bilan o'rganing.</div>
+  </div>
+  <div class="gate-levels">
+    <div class="gl-chip"><span class="gl-dot" style="background:var(--easy)"></span><span id="lv-easy">Oson</span></div>
+    <div class="gl-chip"><span class="gl-dot" style="background:var(--norm)"></span><span id="lv-norm">O'rta</span></div>
+    <div class="gl-chip"><span class="gl-dot" style="background:var(--hard)"></span><span id="lv-hard">Qiyin</span></div>
+  </div>
+  <div class="gate-body">
+    <div class="gate-steps" id="gate-steps">
+      <div class="gs-item"><span class="gs-num">1</span><span id="gs-1">Google hisobingiz bilan kiring</span></div>
+      <div class="gs-item"><span class="gs-num">2</span><span id="gs-2">Quyidagi tugma orqali kanalimizga obuna bo'ling</span></div>
+      <div class="gs-item"><span class="gs-num">3</span><span id="gs-3">"Tekshirish" tugmasini bosing — obuna bo'lsangiz, ilova ochiladi</span></div>
+    </div>
+    <a class="btn-yt" id="gate-yt-link" href="#" target="_blank"><i class="ti ti-brand-youtube"></i> <span id="gate-yt-text">Kanalga obuna bo'lish</span></a>
+    <button class="btn-gsi" onclick="signIn()"><img src="https://www.gstatic.com/marketing-cms/assets/images/d5/dc/cfe9ce8b4425b410b49b7f2dd953/g.webp=n-w48" onerror="this.style.display='none'"> <span id="g-btn">Google orqali kirish va tekshirish</span></button>
+    <div class="gate-disc" id="g-disc">Ilovadan foydalanish uchun YouTube kanalimizga obuna bo'lishingiz kerak. Bu — tekin, lekin obuna talab qilinadi.</div>
+  </div>
+</div>
+
+<!-- LOCKED -->
+<div class="screen" id="s-locked">
+  <div class="lock-wrap">
+    <div class="lock-icon"><i class="ti ti-lock"></i></div>
+    <div class="lock-title" id="lk-title">Obuna kerak</div>
+    <div class="lock-desc" id="lk-desc">Ilovaga kirish uchun avval bizning YouTube kanalimizga obuna bo'ling. Obuna bo'lgach, "Tekshirish" tugmasini bosing.</div>
+    <div class="lock-profile" id="lk-profile" style="display:none">
+      <img id="lk-pic" src="" alt="">
+      <div><div class="pn" id="lk-name"></div><div class="pe" id="lk-email"></div></div>
+    </div>
+    <a class="btn-yt" id="lk-yt-link" href="#" target="_blank"><i class="ti ti-brand-youtube"></i> <span id="lk-yt-text">Kanalga obuna bo'lish</span></a>
+    <button class="btn-recheck" onclick="checkSubscription(false)"><i class="ti ti-refresh"></i> <span id="lk-recheck">Obunani tekshirish</span></button>
+    <button class="btn-signout" onclick="signOut()" id="lk-signout">Chiqish</button>
+  </div>
+</div>
+
+<!-- HOME -->
+<div class="screen" id="s-home">
+  <div class="home-header">
+    <div class="home-top">
+      <img class="home-avatar" id="h-avatar" src="" style="display:none">
+      <div class="home-avatar-fallback" id="h-avatar-fb">🏋️</div>
+      <div>
+        <div class="home-name" id="h-name">Sportchi</div>
+        <div class="home-tag"><i class="ti ti-circle-check-filled"></i><span id="h-sub">Obuna faol</span></div>
+      </div>
+      <div class="home-signout" onclick="signOut()"><i class="ti ti-logout"></i></div>
+    </div>
+  </div>
+  <div class="section-lbl" id="sec-elements">Elementlar</div>
+  <div class="legend">
+    <div class="leg-item"><span class="leg-dot" style="background:var(--easy)"></span><span id="lg-easy">Oson</span></div>
+    <div class="leg-item"><span class="leg-dot" style="background:var(--norm)"></span><span id="lg-norm">O'rta</span></div>
+    <div class="leg-item"><span class="leg-dot" style="background:var(--hard)"></span><span id="lg-hard">Qiyin</span></div>
+  </div>
+  <div class="el-grid" id="el-grid"></div>
+  <div class="section-lbl" id="sec-more">Ko'proq</div>
+  <div class="action-row">
+    <a class="btn-comp" id="btn-comp" href="#" target="_blank">
+      <div class="ic"><i class="ti ti-brand-telegram"></i></div>
+      <div><div class="tt" id="bc-title">Onlayn musobaqa</div><div class="ds" id="bc-desc">Telegram guruhga qo'shiling</div></div>
+      <i class="ti ti-chevron-right chev"></i>
+    </a>
+    <button class="btn-faq" onclick="SS('s-faq')">
+      <div class="ic">❓</div>
+      <div><div class="tt" id="bf-title">Savollar</div><div class="ds" id="bf-desc">Ko'p so'raladigan savollar</div></div>
+      <i class="ti ti-chevron-right chev"></i>
+    </button>
+  </div>
+</div>
+
+<!-- ELEMENT DETAIL -->
+<div class="screen" id="s-element">
+  <div class="tb"><div class="tb-back" onclick="SS('s-home')">←</div><div><div class="tb-title" id="el-title">Element</div><div class="tb-sub" id="el-sub"></div></div></div>
+  <div id="el-content"></div>
+</div>
+
+<!-- FAQ -->
+<div class="screen" id="s-faq">
+  <div class="tb"><div class="tb-back" onclick="SS('s-home')">←</div><div><div class="tb-title" id="faq-title">Savollar</div></div></div>
+  <div id="faq-content" style="padding-top:.5rem"></div>
+  <div class="ask-card">
+    <div class="ask-title" id="ask-title"><i class="ti ti-message-question"></i> Boshqa savol bormi?</div>
+    <textarea class="ask-inp" id="ask-text" placeholder="Savolingizni yozing..."></textarea>
+    <input class="ask-email" id="ask-email" type="email" placeholder="Email (javob uchun)">
+    <button class="btn-send" onclick="sendQ()" id="ask-send">Jo'natish</button>
+    <div class="send-ok" id="send-ok">✅ Savolingiz jo'natildi!</div>
+  </div>
+</div>
+
+<div class="spinner" id="spinner"><div class="spin-box"><div class="spin-icon"><i class="ti ti-loader-2"></i></div><div style="font-size:13px;color:#c3c5cb" id="sp-text">Yuklanmoqda...</div></div></div>
+
+<script>
+// ================================================================
+// CONFIG — Apps Script backend URL (Google Sheets)
+// ================================================================
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwIeCRMy4ijTRSzOtvHlTljr_jyWsBNazsJEtDjdBWhDa1EB8ksNyejv_e5tEeApPgR/exec';
+// ================================================================
+
+let lang = localStorage.getItem('cal_lang') || 'uz';
+let D = {settings:{}, elements:[], exercises:[], faq:[]};
+let accessToken = null, profile = null, tokenClient = null, curElement = null;
+
+const DIFF = {
+  easy:{uz:"Oson",ru:"Легко",cls:'diff-easy'},
+  normal:{uz:"O'rta",ru:"Средне",cls:'diff-normal'},
+  hard:{uz:"Qiyin",ru:"Сложно",cls:'diff-hard'}
+};
+
+const T = {
+  uz:{h1:"O'Z<br><span>DARAJANGNI</span><br>OSHIR", gp:"Handstand, Planche, Front Lever va boshqa elementlarni bosqichma-bosqich, videolar bilan o'rganing.",
+    gbtn:"Google orqali kirish", gdisc:"Ilovadan foydalanish uchun YouTube kanalimizga obuna bo'lishingiz kerak. Bu — tekin, lekin obuna talab qilinadi.",
+    lktitle:"Obuna kerak", lkdesc:"Ilovaga kirish uchun avval bizning YouTube kanalimizga obuna bo'ling. Obuna bo'lgach, \"Tekshirish\" tugmasini bosing.",
+    lkyt:"Kanalga obuna bo'lish", lkrecheck:"Obunani tekshirish", lksignout:"Chiqish",
+    secel:"Elementlar", secmore:"Ko'proq", hsub:"Obuna faol",
+    bctitle:"Onlayn musobaqa", bcdesc:"Telegram guruhga qo'shiling", bftitle:"Savollar", bfdesc:"Ko'p so'raladigan savollar",
+    noel:"Elementlar hali qo'shilmagan", noex:"Bu element uchun mashqlar hali qo'shilmagan",
+    asktitle:"Boshqa savol bormi?", asksend:"Jo'natish", faqtitle:"Savollar", askph:"Savolingizni yozing...",
+    exercises:"mashq", notsub:"Obuna tasdiqlanmadi. Kanalga obuna bo'lib, qayta urinib ko'ring.",
+    gs1:"Google hisobingiz bilan kiring", gs2:"Quyidagi tugma orqali kanalimizga obuna bo'ling", gs3:"\"Tekshirish\" tugmasini bosing — obuna bo'lsangiz, ilova ochiladi",
+    ytlink:"Kanalga obuna bo'lish", gbtn2:"Google orqali kirish va tekshirish"},
+  ru:{h1:"ПРОКАЧАЙ<br><span>СВОЙ</span><br>УРОВЕНЬ", gp:"Изучайте хендстенд, планш, фронт левер и другие элементы шаг за шагом, с видео.",
+    gbtn:"Войти через Google", gdisc:"Для доступа к приложению нужно подписаться на наш YouTube-канал. Бесплатно, но подписка обязательна.",
+    lktitle:"Нужна подписка", lkdesc:"Чтобы войти, подпишитесь на наш YouTube-канал. После подписки нажмите «Проверить».",
+    lkyt:"Подписаться на канал", lkrecheck:"Проверить подписку", lksignout:"Выйти",
+    secel:"Элементы", secmore:"Ещё", hsub:"Подписка активна",
+    bctitle:"Онлайн-соревнование", bcdesc:"Присоединяйтесь в Telegram", bftitle:"Вопросы", bfdesc:"Часто задаваемые вопросы",
+    noel:"Элементы ещё не добавлены", noex:"Упражнения для этого элемента ещё не добавлены",
+    asktitle:"Остались вопросы?", asksend:"Отправить", faqtitle:"Вопросы", askph:"Напишите свой вопрос...",
+    exercises:"упражнений", notsub:"Подписка не подтверждена. Подпишитесь на канал и попробуйте снова.",
+    gs1:"Войдите через свой Google-аккаунт", gs2:"Подпишитесь на наш канал по кнопке ниже", gs3:"Нажмите «Проверить» — если вы подписаны, приложение откроется",
+    ytlink:"Подписаться на канал", gbtn2:"Войти через Google и проверить"}
+};
+function t(k){ return T[lang][k]; }
+
+function SS(id){ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.getElementById(id).classList.add('active'); window.scrollTo(0,0); }
+function spin(on,msg){ document.getElementById('spinner').className='spinner'+(on?' show':''); if(msg) document.getElementById('sp-text').textContent=msg; }
+function setLang(l){ lang=l; localStorage.setItem('cal_lang',l); document.getElementById('lb-uz').classList.toggle('active',l==='uz'); document.getElementById('lb-ru').classList.toggle('active',l==='ru'); applyLang(); renderAll(); }
+
+function applyLang(){
+  document.getElementById('g-h1').innerHTML=t('h1');
+  document.getElementById('g-p').textContent=t('gp');
+  document.getElementById('g-btn').textContent=t('gbtn2');
+  document.getElementById('g-disc').textContent=t('gdisc');
+  document.getElementById('gs-1').textContent=t('gs1');
+  document.getElementById('gs-2').textContent=t('gs2');
+  document.getElementById('gs-3').textContent=t('gs3');
+  document.getElementById('gate-yt-text').textContent=t('ytlink');
+  document.getElementById('lv-easy').textContent=DIFF.easy[lang]; document.getElementById('lv-norm').textContent=DIFF.normal[lang]; document.getElementById('lv-hard').textContent=DIFF.hard[lang];
+  document.getElementById('lg-easy').textContent=DIFF.easy[lang]; document.getElementById('lg-norm').textContent=DIFF.normal[lang]; document.getElementById('lg-hard').textContent=DIFF.hard[lang];
+  document.getElementById('lk-title').textContent=t('lktitle');
+  document.getElementById('lk-desc').textContent=t('lkdesc');
+  document.getElementById('lk-yt-text').textContent=t('lkyt');
+  document.getElementById('lk-recheck').textContent=t('lkrecheck');
+  document.getElementById('lk-signout').textContent=t('lksignout');
+  document.getElementById('sec-elements').textContent=t('secel');
+  document.getElementById('sec-more').textContent=t('secmore');
+  document.getElementById('h-sub').textContent=t('hsub');
+  document.getElementById('bc-title').textContent=t('bctitle');
+  document.getElementById('bc-desc').textContent=t('bcdesc');
+  document.getElementById('bf-title').textContent=t('bftitle');
+  document.getElementById('bf-desc').textContent=t('bfdesc');
+  document.getElementById('ask-title').innerHTML='<i class="ti ti-message-question"></i> '+t('asktitle');
+  document.getElementById('ask-send').textContent=t('asksend');
+  document.getElementById('ask-text').placeholder=t('askph');
+  document.getElementById('faq-title').textContent=t('faqtitle');
+}
+
+// ================================================================
+// BACKEND
+// ================================================================
+async function api(action,params={}){
+  const qs=new URLSearchParams({action,...params,t:Date.now()});
+  const r=await fetch(`${SCRIPT_URL}?${qs.toString()}`);
+  return r.json();
+}
+async function apiPost(body){
+  const r=await fetch(`${SCRIPT_URL}?data=${encodeURIComponent(JSON.stringify(body))}&t=${Date.now()}`,{method:'GET'});
+  return r.json();
+}
+async function loadData(){
+  try{
+    const res = await api('get_all');
+    if(res && res.ok) D = res.data;
+  }catch(e){ console.error('Backend error',e); }
+  const url = (D.settings&&D.settings.youtube_channel_url) || (D.settings&&D.settings.youtube_channel_id ? `https://www.youtube.com/channel/${D.settings.youtube_channel_id}` : '#');
+  document.getElementById('gate-yt-link').href = url;
+}
+
+// ================================================================
+// GOOGLE SIGN-IN + YOUTUBE SUBSCRIPTION CHECK
+// ================================================================
+function initTokenClient(){
+  const clientId = (D.settings&&D.settings.google_client_id)||'';
+  tokenClient = google.accounts.oauth2.initTokenClient({
+    client_id: clientId,
+    scope: 'openid email profile https://www.googleapis.com/auth/youtube.readonly',
+    callback: async (resp)=>{
+      if(resp && resp.access_token){
+        accessToken = resp.access_token;
+        spin(true, lang==='ru'?'Проверяем подписку...':'Obuna tekshirilmoqda...');
+        await fetchProfile();
+        await checkSubscription(true);
+        spin(false);
+      }
+    }
+  });
+}
+function signIn(){
+  if(!window.__gisReady || typeof google==='undefined'){ alert(lang==='ru'?'Google сервис ещё загружается, попробуйте снова через пару секунд.':'Google xizmati hali yuklanmoqda, birozdan keyin qayta urining.'); return; }
+  if(!tokenClient) initTokenClient();
+  tokenClient.requestAccessToken({prompt:'consent'});
+}
+function signOut(){
+  localStorage.removeItem('cal_auth');
+  accessToken=null; profile=null;
+  if(window.google && google.accounts && google.accounts.oauth2 && accessToken){ google.accounts.oauth2.revoke(accessToken,()=>{}); }
+  SS('s-gate');
+}
+async function fetchProfile(){
+  try{
+    const r = await fetch('https://www.googleapis.com/oauth2/v3/userinfo',{headers:{Authorization:'Bearer '+accessToken}});
+    const j = await r.json();
+    profile = {name:j.name, picture:j.picture, email:j.email};
+  }catch(e){ profile=null; }
+}
+async function checkSubscription(fromSignIn){
+  const chId = (D.settings&&D.settings.youtube_channel_id)||'';
+  showLockedProfile();
+  if(!accessToken){ SS('s-locked'); return; }
+  if(!chId){ SS('s-locked'); return; }
+  try{
+    const r = await fetch(`https://www.googleapis.com/youtube/v3/subscriptions?part=snippet&mine=true&forChannelId=${encodeURIComponent(chId)}`,{headers:{Authorization:'Bearer '+accessToken}});
+    const j = await r.json();
+    const subscribed = !!(j.items && j.items.length);
+    localStorage.setItem('cal_auth', JSON.stringify({subscribed, ts:Date.now(), profile}));
+    if(subscribed){ goHome(); } else { SS('s-locked'); }
+  }catch(e){
+    SS('s-locked');
+  }
+}
+function showLockedProfile(){
+  if(profile){
+    document.getElementById('lk-profile').style.display='flex';
+    document.getElementById('lk-pic').src=profile.picture||'';
+    document.getElementById('lk-name').textContent=profile.name||'';
+    document.getElementById('lk-email').textContent=profile.email||'';
+  }
+  const url = (D.settings&&D.settings.youtube_channel_url) || (D.settings&&D.settings.youtube_channel_id ? `https://www.youtube.com/channel/${D.settings.youtube_channel_id}` : '#');
+  document.getElementById('lk-yt-link').href = url;
+}
+function goHome(){
+  if(profile){
+    if(profile.picture){ document.getElementById('h-avatar').src=profile.picture; document.getElementById('h-avatar').style.display='block'; document.getElementById('h-avatar-fb').style.display='none'; }
+    document.getElementById('h-name').textContent = profile.name || (lang==='ru'?'Спортсмен':'Sportchi');
+  }
+  renderElements();
+  const tg = (D.settings&&D.settings.telegram_competition_link)||'#';
+  document.getElementById('btn-comp').href = tg;
+  SS('s-home');
+}
+
+// ================================================================
+// ELEMENTS / EXERCISES
+// ================================================================
+function renderAll(){
+  if(document.getElementById('s-home').classList.contains('active')) renderElements();
+  if(document.getElementById('s-element').classList.contains('active') && curElement) openElement(curElement);
+  if(document.getElementById('s-faq').classList.contains('active')) renderFaq();
+}
+function elName(e){ return lang==='ru' && e.name_ru ? e.name_ru : e.name_uz; }
+function exField(ex,f){ const k=f+'_'+lang; return (lang==='ru' && ex[k]) ? ex[k] : ex[f+'_uz']; }
+
+function renderElements(){
+  const els = (D.elements||[]).slice().sort((a,b)=>(a.order||0)-(b.order||0));
+  const grid = document.getElementById('el-grid');
+  if(!els.length){ grid.innerHTML = `<div class="el-empty">${t('noel')}</div>`; return; }
+  grid.innerHTML = els.map(e=>{
+    const cnt = (D.exercises||[]).filter(x=>String(x.elementId)===String(e.id)).length;
+    return `<div class="el-card" onclick="openElement('${e.id}')">
+      <span class="el-icon">${e.icon||'🏋️'}</span>
+      <div class="el-name">${elName(e)}</div>
+      <div class="el-count">${cnt} ${t('exercises')}</div>
+    </div>`;
+  }).join('');
+}
+
+function openElement(id){
+  curElement = id;
+  const el = (D.elements||[]).find(e=>String(e.id)===String(id));
+  if(!el) return;
+  document.getElementById('el-title').textContent = elName(el);
+  const exs = (D.exercises||[]).filter(x=>String(x.elementId)===String(id)).sort((a,b)=>(a.order||0)-(b.order||0));
+  document.getElementById('el-sub').textContent = `${exs.length} ${t('exercises')}`;
+  let html='';
+  if(!exs.length){
+    html = `<div class="no-ex"><div style="font-size:38px;margin-bottom:.75rem">🏗️</div>${t('noex')}</div>`;
+  } else {
+    exs.forEach((ex,idx)=>{ html+=exCard(ex,idx); });
+  }
+  document.getElementById('el-content').innerHTML = html;
+  SS('s-element');
+}
+
+function exCard(ex,idx){
+  const name = exField(ex,'name');
+  const desc = exField(ex,'desc');
+  const stepsRaw = exField(ex,'steps');
+  const steps = (stepsRaw||'').split('|').filter(Boolean);
+  const tip = exField(ex,'tip');
+  const diff = DIFF[ex.difficulty] || DIFF.normal;
+  return `<div class="ex-card">
+    <div class="ex-top">
+      <div class="ex-step-num">${idx+1}</div>
+      <div class="ex-name">${name||''}</div>
+      <div class="diff-badge ${diff.cls}">${diff[lang]}</div>
+    </div>
+    <div class="ex-body">
+      <div class="ex-gif">${ex.gifUrl?`<img src="${ex.gifUrl}" alt="${name}">`:'<i class="ti ti-photo" style="color:#444;font-size:26px"></i>'}</div>
+      <div class="ex-info">
+        ${ex.reps?`<span class="ex-reps">${ex.reps}</span>`:''}
+        ${desc?`<div class="ex-desc">${desc}</div>`:''}
+        ${steps.length?`<ol class="ex-steps">${steps.map(s=>`<li>${s}</li>`).join('')}</ol>`:''}
+        ${tip?`<div class="ex-tip">💡 ${tip}</div>`:''}
+      </div>
+    </div>
+  </div>`;
+}
+
+// ================================================================
+// FAQ
+// ================================================================
+function renderFaq(){
+  const faqs = D.faq||[];
+  let h='';
+  faqs.forEach((f,i)=>{
+    const q = lang==='ru'&&f.q_ru?f.q_ru:f.q_uz;
+    const a = lang==='ru'&&f.a_ru?f.a_ru:f.a_uz;
+    h+=`<div class="faq-item"><div class="faq-q" onclick="tFaq(${i})"><span class="faq-q-text">${q}</span><i class="ti ti-chevron-down faq-icon" id="fi-${i}"></i></div><div class="faq-a" id="fa-${i}">${a}</div></div>`;
+  });
+  if(!faqs.length) h = `<div style="text-align:center;padding:2rem;color:var(--muted);font-size:13px">${lang==='ru'?'Вопросы ещё не добавлены':"Savollar hali kiritilmagan"}</div>`;
+  document.getElementById('faq-content').innerHTML = h;
+}
+function tFaq(i){
+  const a=document.getElementById('fa-'+i), ic=document.getElementById('fi-'+i);
+  const open=a.classList.contains('vis');
+  document.querySelectorAll('.faq-a').forEach(el=>el.classList.remove('vis'));
+  document.querySelectorAll('.faq-icon').forEach(el=>el.classList.remove('open'));
+  if(!open){ a.classList.add('vis'); ic.classList.add('open'); }
+}
+async function sendQ(){
+  const txt = document.getElementById('ask-text').value.trim();
+  if(!txt) return;
+  try{
+    await apiPost({action:'send_question', question:txt, email:document.getElementById('ask-email').value, lang});
+  }catch(e){}
+  document.getElementById('send-ok').style.display='block';
+  document.getElementById('ask-text').value='';
+  document.getElementById('ask-email').value='';
+  setTimeout(()=>document.getElementById('send-ok').style.display='none',3500);
+}
+
+// ================================================================
+// INIT
+// ================================================================
+window.onload = async ()=>{
+  document.getElementById('lang-bar').style.display='flex';
+  document.getElementById('lb-uz').classList.toggle('active', lang==='uz');
+  document.getElementById('lb-ru').classList.toggle('active', lang==='ru');
+  applyLang();
+  spin(true, lang==='ru'?'Загрузка...':'Yuklanmoqda...');
+  await loadData();
+  spin(false);
+  renderElements(); renderFaq();
+
+  const cached = JSON.parse(localStorage.getItem('cal_auth')||'null');
+  if(cached && cached.subscribed){
+    profile = cached.profile;
+    goHome();
+    // silently re-verify in background if cache is older than 24h
+    if(Date.now()-cached.ts > 24*60*60*1000){
+      // will require a fresh sign-in when the user re-opens s-gate manually; passive for now
+    }
+    return;
+  }
+  SS('s-gate');
+};
+</script>
+</body>
+</html>

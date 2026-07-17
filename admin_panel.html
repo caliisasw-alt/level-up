@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Admin — LEVEL UP Calisthenics</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.14.0/dist/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:#0f1013;color:#e7e8ec;min-height:100vh}
+.disp{font-family:'Oswald',sans-serif;text-transform:uppercase}
+
+/* CONFIG SCREEN */
+.cfg{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1rem}
+.cfg-box{background:#191b20;border-radius:16px;padding:2.5rem;width:100%;max-width:440px;border:1px solid #2a2d34}
+.cfg-logo{text-align:center;font-size:44px;margin-bottom:1rem}
+.cfg-title{font-family:'Oswald',sans-serif;font-size:20px;font-weight:700;text-align:center;margin-bottom:.3rem;text-transform:uppercase}
+.cfg-sub{font-size:13px;color:#787c86;text-align:center;margin-bottom:1.75rem}
+.fi{width:100%;padding:.65rem .9rem;background:#0f1013;border:1px solid #2a2d34;border-radius:8px;color:#e7e8ec;font-size:14px;font-family:'Inter',sans-serif;margin-bottom:.5rem}
+.fi:focus{outline:none;border-color:#f2b134}
+.fi-lbl{font-size:12px;color:#9a9ea8;margin-bottom:.3rem;display:block}
+.btn-cfg{width:100%;padding:.85rem;background:#f2b134;color:#1a1305;border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;margin-top:.5rem}
+.btn-cfg:hover{background:#e0a326}
+.cfg-err{color:#ef4a4a;font-size:12px;text-align:center;margin-top:.5rem;display:none}
+
+/* LAYOUT */
+.adm{display:none;min-height:100vh}
+.sb{width:250px;background:#16171c;border-right:1px solid #26282f;position:fixed;top:0;left:0;height:100vh;overflow-y:auto;z-index:10}
+.sb-logo{padding:1.25rem 1.5rem;border-bottom:1px solid #26282f;display:flex;align-items:center;gap:.75rem}
+.sb-logo i{font-size:24px;color:#f2b134}
+.sb-logo-text{font-family:'Oswald',sans-serif;font-size:14px;font-weight:700;text-transform:uppercase}
+.sb-logo-sub{font-size:11px;color:#787c86}
+.sb-nav{padding:.5rem 0}
+.ns{font-size:10px;font-weight:600;color:#4a4d55;text-transform:uppercase;letter-spacing:.08em;padding:.6rem 1.5rem .2rem}
+.ni{display:flex;align-items:center;gap:.65rem;padding:.6rem 1.4rem;cursor:pointer;color:#9a9ea8;font-size:13px;transition:.15s;border-left:3px solid transparent;width:100%;background:none;border-top:none;border-right:none;border-bottom:none;text-align:left}
+.ni:hover{background:#1c1e24;color:#e7e8ec}
+.ni.active{background:#1c1e24;color:#f2b134;border-left-color:#f2b134;font-weight:600}
+.ni i{font-size:17px;flex-shrink:0}
+.mc{margin-left:250px;padding:1.75rem;min-height:100vh}
+.top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.75rem;gap:1rem}
+.ptitle{font-family:'Oswald',sans-serif;font-size:22px;font-weight:700;text-transform:uppercase}
+.psub{font-size:13px;color:#787c86;margin-top:3px}
+.btn-out{padding:.5rem 1rem;background:#26282f;border:none;border-radius:8px;color:#9a9ea8;cursor:pointer;font-size:12px;display:flex;align-items:center;gap:5px;flex-shrink:0}
+.btn-out:hover{background:#32353d}
+.ts{display:none}.ts.active{display:block}
+
+.ac{background:#16171c;border:1px solid #26282f;border-radius:12px;margin-bottom:1.1rem;overflow:hidden}
+.ach{padding:.9rem 1.1rem;border-bottom:1px solid #26282f;display:flex;align-items:center;justify-content:space-between;gap:.75rem}
+.act{font-size:14px;font-weight:700;display:flex;align-items:center;gap:.5rem}
+.acb{padding:1.1rem}
+.sg{display:grid;grid-template-columns:repeat(3,1fr);gap:.85rem;margin-bottom:1.5rem}
+.sc{background:#16171c;border:1px solid #26282f;border-radius:12px;padding:1.1rem}
+.scl{font-size:11px;color:#787c86;margin-bottom:.4rem;display:flex;align-items:center;gap:4px}
+.scv{font-family:'Oswald',sans-serif;font-size:26px;font-weight:700}
+
+.fl{font-size:12px;color:#9a9ea8;margin-bottom:.3rem;display:block;font-weight:500}
+.inp{width:100%;padding:.6rem .85rem;background:#0f1013;border:1px solid #26282f;border-radius:8px;color:#e7e8ec;font-size:13px;font-family:'Inter',sans-serif}
+.inp:focus{outline:none;border-color:#f2b134}
+.ta{width:100%;padding:.6rem .85rem;background:#0f1013;border:1px solid #26282f;border-radius:8px;color:#e7e8ec;font-size:13px;font-family:'Inter',sans-serif;resize:vertical;min-height:60px}
+.ta:focus{outline:none;border-color:#f2b134}
+.fg{margin-bottom:.8rem}
+.r2{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+.r3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8rem}
+
+.bp{padding:.55rem 1rem;background:#f2b134;color:#1a1305;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:.35rem}
+.bp:hover{background:#e0a326}
+.bs{padding:.55rem 1rem;background:#3ecf6e;color:#08240f;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:.35rem}
+.bs:hover{background:#33b25e}
+.bd{padding:.45rem .8rem;background:#ef4a4a;color:#fff;border:none;border-radius:7px;font-size:12px;cursor:pointer;display:inline-flex;align-items:center;gap:.3rem}
+.bd:hover{background:#d93d3d}
+.bg{padding:.45rem .8rem;background:#26282f;color:#9a9ea8;border:none;border-radius:7px;font-size:12px;cursor:pointer}
+.bg:hover{background:#32353d;color:#e7e8ec}
+.bo{padding:.4rem .6rem;background:#1c1e24;color:#9a9ea8;border:1px solid #26282f;border-radius:6px;font-size:12px;cursor:pointer}
+.bo:hover{color:#e7e8ec;border-color:#f2b134}
+.toast{display:none;position:fixed;bottom:2rem;right:2rem;background:#3ecf6e;color:#08240f;padding:.7rem 1.3rem;border-radius:10px;font-size:13px;font-weight:700;z-index:999;box-shadow:0 4px 20px rgba(0,0,0,.4)}
+.loading{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:888;align-items:center;justify-content:center;font-size:16px;color:#fff}
+.loading.show{display:flex}
+
+/* ELEMENTS */
+.el-row{display:flex;align-items:center;gap:.7rem;background:#0f1013;border:1px solid #26282f;border-radius:10px;padding:.7rem .9rem;margin-bottom:.6rem}
+.el-row .inp{flex:1}
+.el-icon-inp{width:56px;text-align:center;flex-shrink:0;font-size:18px}
+.el-order-btns{display:flex;flex-direction:column;gap:2px;flex-shrink:0}
+
+/* EXERCISES */
+.el-tabs{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.1rem}
+.el-tab{padding:.4rem .85rem;border:1.5px solid #26282f;border-radius:20px;font-size:12px;color:#9a9ea8;cursor:pointer;background:none;transition:.15s}
+.el-tab:hover{border-color:#f2b134;color:#e7e8ec}
+.el-tab.sel{border-color:#f2b134;background:#2a220c;color:#f2b134;font-weight:700}
+.exb{background:#0f1013;border:1px solid #26282f;border-radius:10px;padding:.9rem;margin-bottom:.75rem}
+.exb-top{display:flex;align-items:center;gap:.6rem;margin-bottom:.7rem}
+.diff-select{display:flex;gap:.4rem}
+.diff-opt{padding:.35rem .7rem;border-radius:20px;font-size:11px;font-weight:700;cursor:pointer;border:1.5px solid transparent}
+.diff-opt.easy{background:#12291d;color:#3ecf6e}
+.diff-opt.normal{background:#2b1f14;color:#c98a4b}
+.diff-opt.hard{background:#2c1414;color:#ef4a4a}
+.diff-opt.sel.easy{border-color:#3ecf6e}
+.diff-opt.sel.normal{border-color:#c98a4b}
+.diff-opt.sel.hard{border-color:#ef4a4a}
+.gif-box{width:100px;height:82px;background:#191b20;border:2px dashed #26282f;border-radius:8px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;flex-shrink:0}
+.gif-box img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.gif-box span{font-size:9px;color:#4a4d55;text-align:center;padding:.2rem}
+.step-row{display:flex;gap:.4rem;margin-bottom:.35rem;align-items:center}
+.step-row .inp{flex:1;font-size:12px}
+.lang-tabs{display:flex;gap:.4rem;margin-bottom:.75rem}
+.lt{padding:.3rem .8rem;border:1px solid #26282f;border-radius:6px;font-size:12px;color:#9a9ea8;cursor:pointer;background:none}
+.lt.active{background:#f2b134;border-color:#f2b134;color:#1a1305}
+.ex-actions{display:flex;justify-content:space-between;align-items:center;margin-top:.7rem}
+
+.faqb{background:#0f1013;border:1px solid #26282f;border-radius:10px;padding:.9rem;margin-bottom:.6rem}
+.info-note{background:#0f1013;border-radius:8px;padding:1rem;font-size:13px;line-height:1.8;color:#9a9ea8;border-left:3px solid #f2b134}
+</style>
+</head>
+<body>
+
+<!-- CONFIG SCREEN -->
+<div class="cfg" id="cfg-screen">
+  <div class="cfg-box">
+    <div class="cfg-logo">🏋️</div>
+    <div class="cfg-title">Level Up Admin</div>
+    <div class="cfg-sub">Davom etish uchun kodni kiriting</div>
+    <label class="fi-lbl">Kod (parol)</label>
+    <input class="fi" id="cfg-pass" type="password" placeholder="Admin paroli" onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="btn-cfg" onclick="doLogin()">Kirish</button>
+    <div class="cfg-err" id="cfg-err">Noto'g'ri kod</div>
+  </div>
+</div>
+
+<!-- ADMIN -->
+<div class="adm" id="adm">
+  <div class="sb">
+    <div class="sb-logo"><i class="ti ti-barbell"></i><div><div class="sb-logo-text">Level Up</div><div class="sb-logo-sub">Admin panel</div></div></div>
+    <div class="sb-nav">
+      <div class="ns">Umumiy</div>
+      <button class="ni active" onclick="ST('dash')"><i class="ti ti-layout-dashboard"></i>Dashboard</button>
+      <div class="ns">Kontent</div>
+      <button class="ni" onclick="ST('elements')"><i class="ti ti-category"></i>Elementlar</button>
+      <button class="ni" onclick="ST('exercises')"><i class="ti ti-dumbbell"></i>Mashqlar</button>
+      <button class="ni" onclick="ST('faq')"><i class="ti ti-help-circle"></i>Savollar (FAQ)</button>
+      <div class="ns">Sozlamalar</div>
+      <button class="ni" onclick="ST('access')"><i class="ti ti-brand-youtube"></i>YouTube obuna</button>
+      <button class="ni" onclick="ST('competition')"><i class="ti ti-brand-telegram"></i>Onlayn musobaqa</button>
+      <button class="ni" onclick="ST('settings')"><i class="ti ti-settings"></i>Ilova / Parol</button>
+    </div>
+  </div>
+  <div class="mc">
+    <div class="top">
+      <div><div class="ptitle" id="page-title">Dashboard</div><div class="psub" id="page-sub">Umumiy ko'rsatkichlar</div></div>
+      <button class="btn-out" onclick="doLogout()"><i class="ti ti-logout"></i>Chiqish</button>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div class="ts active" id="t-dash">
+      <div class="sg">
+        <div class="sc"><div class="scl"><i class="ti ti-category"></i>Elementlar</div><div class="scv" id="ds-el">0</div></div>
+        <div class="sc"><div class="scl"><i class="ti ti-dumbbell"></i>Mashqlar</div><div class="scv" id="ds-ex">0</div></div>
+        <div class="sc"><div class="scl"><i class="ti ti-help-circle"></i>Savollar</div><div class="scv" id="ds-faq">0</div></div>
+      </div>
+      <div class="ac">
+        <div class="ach"><div class="act"><i class="ti ti-info-circle" style="color:#f2b134"></i>Qanday ishlaydi</div></div>
+        <div class="acb">
+          <div class="info-note">
+            1. <b style="color:#e7e8ec">Elementlar</b> bo'limida yo'nalish (masalan: Handstand, Planche, Front Lever) qo'shasiz.<br>
+            2. <b style="color:#e7e8ec">Mashqlar</b> bo'limida har bir element ichiga bosqichma-bosqich mashqlarni (GIF, takror soni, qiyinlik darajasi) qo'shasiz.<br>
+            3. Foydalanuvchi ilovaga kirishi uchun sizning YouTube kanalingizga obuna bo'lishi kerak — buni <b style="color:#e7e8ec">YouTube obuna</b> bo'limida sozlaysiz.<br>
+            4. <b style="color:#e7e8ec">Onlayn musobaqa</b> bo'limida Telegram guruh/kanal linkini kiriting — foydalanuvchilar shu link orqali musobaqaga qo'shiladi.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ELEMENTS -->
+    <div class="ts" id="t-elements">
+      <div class="ac">
+        <div class="ach"><div class="act"><i class="ti ti-category"></i>Elementlar (yo'nalishlar)</div><button class="bp" onclick="addElement()"><i class="ti ti-plus"></i>Yangi element</button></div>
+        <div class="acb" id="elements-list"></div>
+      </div>
+    </div>
+
+    <!-- EXERCISES -->
+    <div class="ts" id="t-exercises">
+      <div class="ac">
+        <div class="ach"><div class="act"><i class="ti ti-dumbbell"></i>Mashqlar</div><button class="bp" onclick="addExercise()"><i class="ti ti-plus"></i>Yangi mashq</button></div>
+        <div class="acb">
+          <div class="el-tabs" id="ex-el-tabs"></div>
+          <div id="ex-list"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAQ -->
+    <div class="ts" id="t-faq">
+      <div class="ac">
+        <div class="ach"><div class="act"><i class="ti ti-help-circle"></i>FAQ savollar</div><button class="bp" onclick="addFaq()"><i class="ti ti-plus"></i>Qo'shish</button></div>
+        <div class="acb" id="faq-list"></div>
+      </div>
+    </div>
+
+    <!-- ACCESS / YOUTUBE -->
+    <div class="ts" id="t-access">
+      <div class="ac">
+        <div class="ach"><div class="act"><i class="ti ti-brand-youtube" style="color:#ff0033"></i>YouTube obuna talabi</div></div>
+        <div class="acb">
+          <div class="info-note" style="margin-bottom:1rem">
+            Foydalanuvchi Google hisobi bilan kirganda, tizim YouTube Data API orqali uning sizning kanalingizga obuna ekanini haqiqatan tekshiradi. Buning uchun Google Cloud Console'da: (1) YouTube Data API v3'ni yoqing, (2) OAuth 2.0 Client ID (Web application) yarating va ilova joylashgan domenni "Authorized JavaScript origins" ga qo'shing. Batafsil qo'llanma alohida faylda (SETUP_GUIDE.md).
+          </div>
+          <div class="fg"><label class="fl">Google OAuth Client ID</label><input class="inp" id="ac-client-id" placeholder="xxxxxxx.apps.googleusercontent.com"></div>
+          <div class="r2">
+            <div class="fg"><label class="fl">YouTube kanal ID (UC... bilan boshlanadi)</label><input class="inp" id="ac-channel-id" placeholder="UCxxxxxxxxxxxxxxxxxx"></div>
+            <div class="fg"><label class="fl">Kanal obuna havolasi</label><input class="inp" id="ac-channel-url" placeholder="https://www.youtube.com/@sizningkanal"></div>
+          </div>
+          <button class="bs" onclick="saveAccessSettings()"><i class="ti ti-device-floppy"></i>Saqlash</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- COMPETITION -->
+    <div class="ts" id="t-competition">
+      <div class="ac">
+        <div class="ach"><div class="act"><i class="ti ti-brand-telegram" style="color:#229ed9"></i>Onlayn musobaqa (Telegram)</div></div>
+        <div class="acb">
+          <div class="info-note" style="margin-bottom:1rem">Ilovadagi "Onlayn musobaqa" tugmasi bosilganda, foydalanuvchi shu Telegram guruh/kanal/bot havolasiga o'tadi — u yerda siz musobaqani o'tkazasiz.</div>
+          <div class="fg"><label class="fl">Telegram havola</label><input class="inp" id="cp-link" placeholder="https://t.me/sizning_guruh"></div>
+          <button class="bs" onclick="saveCompetitionSettings()"><i class="ti ti-device-floppy"></i>Saqlash</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div class="ts" id="t-settings">
+      <div class="ac">
+        <div class="ach"><div class="act"><i class="ti ti-app-window"></i>Ilova nomi</div></div>
+        <div class="acb">
+          <div class="r2">
+            <div class="fg"><label class="fl">Nomi (O'zbekcha)</label><input class="inp" id="st-name-uz"></div>
+            <div class="fg"><label class="fl">Nomi (Ruscha)</label><input class="inp" id="st-name-ru"></div>
+          </div>
+          <button class="bs" onclick="saveAppSettings()"><i class="ti ti-device-floppy"></i>Saqlash</button>
+        </div>
+      </div>
+      <div class="ac">
+        <div class="ach"><div class="act"><i class="ti ti-lock"></i>Parolni o'zgartirish</div></div>
+        <div class="acb">
+          <div class="r2">
+            <div class="fg"><label class="fl">Yangi parol</label><input class="inp" type="password" id="st-p1"></div>
+            <div class="fg"><label class="fl">Tasdiqlang</label><input class="inp" type="password" id="st-p2"></div>
+          </div>
+          <button class="bs" onclick="changePass()"><i class="ti ti-device-floppy"></i>Parolni saqlash</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<div class="loading" id="loading"><div>⏳ Yuklanmoqda...</div></div>
+
+<script>
+// ============================================================
+// CONFIG — Apps Script backend URL (bir marta shu yerga joylashtiring)
+// ============================================================
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwIeCRMy4ijTRSzOtvHlTljr_jyWsBNazsJEtDjdBWhDa1EB8ksNyejv_e5tEeApPgR/exec';
+// ============================================================
+let PASS='', curElTab=null, D={};
+const DIFFS = ['easy','normal','hard'];
+const DIFF_LBL = {easy:"Oson", normal:"O'rta", hard:"Qiyin"};
+
+window.onload = ()=>{
+  // Har safar sahifa ochilganda faqat kod (parol) so'raladi — URL faylga allaqachon yozilgan.
+  document.getElementById('cfg-pass').focus();
+};
+
+async function doLogin(){
+  const pass = document.getElementById('cfg-pass').value.trim();
+  if(!pass){ document.getElementById('cfg-err').style.display='block'; document.getElementById('cfg-err').textContent='Kodni kiriting'; return; }
+  PASS = pass;
+  load(true);
+  try{
+    const res = await api('admin_login',{pass});
+    load(false);
+    if(res && res.ok){
+      document.getElementById('cfg-screen').style.display='none';
+      document.getElementById('adm').style.display='flex';
+      await loadAll();
+    } else {
+      document.getElementById('cfg-err').style.display='block'; document.getElementById('cfg-err').textContent="Noto'g'ri kod";
+      document.getElementById('cfg-pass').value='';
+    }
+  }catch(e){
+    load(false);
+    document.getElementById('cfg-err').style.display='block'; document.getElementById('cfg-err').textContent="Ulanishda xatolik. Internetni tekshiring.";
+  }
+}
+function doLogout(){ location.reload(); }
+
+async function api(action,params={}){
+  const qs=new URLSearchParams({action,pass:PASS,...params,t:Date.now()});
+  const r = await fetch(`${SCRIPT_URL}?${qs.toString()}`);
+  return r.json();
+}
+async function apiPost(body){
+  const r = await fetch(`${SCRIPT_URL}?data=${encodeURIComponent(JSON.stringify({...body,pass:PASS}))}&t=${Date.now()}`,{method:'GET'});
+  return r.json();
+}
+
+async function loadAll(){
+  load(true);
+  try{
+    const res = await api('get_all');
+    if(res && res.ok) D = res.data;
+  }catch(e){}
+  load(false);
+  if(!D.elements) D.elements=[]; if(!D.exercises) D.exercises=[]; if(!D.faq) D.faq=[]; if(!D.settings) D.settings={};
+  renderDash(); renderElements(); renderExercises(); renderFaq(); fillSettings();
+}
+
+function ST(id){
+  document.querySelectorAll('.ts').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.ni').forEach(n=>n.classList.remove('active'));
+  document.getElementById('t-'+id).classList.add('active');
+  event.currentTarget.classList.add('active');
+  const titles={dash:['Dashboard',"Umumiy ko'rsatkichlar"],elements:['Elementlar',"Yo'nalishlarni boshqarish"],exercises:['Mashqlar',"Elementlar ichidagi mashqlar"],faq:['Savollar (FAQ)',"Ko'p so'raladigan savollar"],access:['YouTube obuna',"Kirish talabini sozlash"],competition:['Onlayn musobaqa',"Telegram havolasi"],settings:['Ilova / Parol',"Umumiy sozlamalar"]};
+  document.getElementById('page-title').textContent=titles[id][0];
+  document.getElementById('page-sub').textContent=titles[id][1];
+}
+
+function renderDash(){
+  document.getElementById('ds-el').textContent=(D.elements||[]).length;
+  document.getElementById('ds-ex').textContent=(D.exercises||[]).length;
+  document.getElementById('ds-faq').textContent=(D.faq||[]).length;
+}
+
+// ================================================================
+// ELEMENTS
+// ================================================================
+function renderElements(){
+  const els = (D.elements||[]).slice().sort((a,b)=>(a.order||0)-(b.order||0));
+  let h='';
+  els.forEach((e,i)=>{
+    h+=`<div class="el-row">
+      <input class="inp el-icon-inp" value="${e.icon||''}" placeholder="🤸" onchange="elF('${e.id}','icon',this.value)">
+      <input class="inp" value="${e.name_uz||''}" placeholder="Nomi (UZ) — masalan Handstand" onchange="elF('${e.id}','name_uz',this.value)">
+      <input class="inp" value="${e.name_ru||''}" placeholder="Nomi (RU)" onchange="elF('${e.id}','name_ru',this.value)">
+      <div class="el-order-btns">
+        <button class="bo" onclick="moveElement('${e.id}',-1)"><i class="ti ti-chevron-up"></i></button>
+        <button class="bo" onclick="moveElement('${e.id}',1)"><i class="ti ti-chevron-down"></i></button>
+      </div>
+      <button class="bp" onclick="saveElement('${e.id}')"><i class="ti ti-device-floppy"></i></button>
+      <button class="bd" onclick="delElement('${e.id}')"><i class="ti ti-trash"></i></button>
+    </div>`;
+  });
+  if(!els.length) h = `<div style="text-align:center;padding:2rem;color:#787c86;font-size:13px">Hali element qo'shilmagan. "Yangi element" tugmasini bosing.</div>`;
+  document.getElementById('elements-list').innerHTML = h;
+}
+function elF(id,field,val){ const e=D.elements.find(x=>x.id===id); if(e) e[field]=val; }
+function addElement(){
+  const ne = {id:'EL'+Date.now(), name_uz:'', name_ru:'', icon:'🤸', order:(D.elements||[]).length};
+  if(!D.elements) D.elements=[];
+  D.elements.push(ne);
+  renderElements();
+}
+async function saveElement(id){
+  const e = D.elements.find(x=>x.id===id); if(!e) return;
+  if(!e.name_uz){ toast("Nomi (UZ) to'ldirilishi kerak",'red'); return; }
+  load(true);
+  const res = await apiPost({action:'save_element', element:e});
+  load(false);
+  if(res && res.ok){ toast('Saqlandi'); renderDash(); renderExercises(); } else toast('Xatolik','red');
+}
+async function delElement(id){
+  if(!confirm("Bu elementni va uning barcha mashqlarini o'chirmoqchimisiz?")) return;
+  load(true);
+  const res = await apiPost({action:'delete_element', id});
+  load(false);
+  if(res && res.ok){
+    D.elements = D.elements.filter(e=>e.id!==id);
+    D.exercises = D.exercises.filter(x=>String(x.elementId)!==String(id));
+    renderElements(); renderExercises(); renderDash();
+    toast("O'chirildi");
+  } else toast('Xatolik','red');
+}
+function moveElement(id,dir){
+  const els = (D.elements||[]).slice().sort((a,b)=>(a.order||0)-(b.order||0));
+  const idx = els.findIndex(e=>e.id===id);
+  const swapIdx = idx+dir;
+  if(swapIdx<0 || swapIdx>=els.length) return;
+  const a=els[idx], b=els[swapIdx];
+  const tmp=a.order||0; a.order=b.order||0; b.order=tmp;
+  renderElements();
+  apiPost({action:'save_element',element:a}); apiPost({action:'save_element',element:b});
+}
+
+// ================================================================
+// EXERCISES
+// ================================================================
+function renderExercises(){
+  const els = (D.elements||[]).slice().sort((a,b)=>(a.order||0)-(b.order||0));
+  if(!curElTab && els.length) curElTab = els[0].id;
+  let tabs='';
+  els.forEach(e=>{ tabs+=`<button class="el-tab${String(e.id)===String(curElTab)?' sel':''}" onclick="setExTab('${e.id}')">${e.icon||''} ${e.name_uz||'—'}</button>`; });
+  document.getElementById('ex-el-tabs').innerHTML = tabs || `<span style="font-size:12px;color:#787c86">Avval "Elementlar" bo'limida element qo'shing.</span>`;
+
+  const exs = (D.exercises||[]).filter(x=>String(x.elementId)===String(curElTab)).sort((a,b)=>(a.order||0)-(b.order||0));
+  let html='';
+  exs.forEach((ex,idx)=>{
+    const stepsUz = (ex.steps_uz||'').split('|').filter(Boolean);
+    const stepsRu = (ex.steps_ru||'').split('|').filter(Boolean);
+    html += `<div class="exb" id="exb-${ex.id}">
+      <div class="exb-top">
+        <span style="font-family:'Oswald',sans-serif;font-weight:700;color:#f2b134">#${idx+1}</span>
+        <div class="el-order-btns" style="flex-direction:row">
+          <button class="bo" onclick="moveExercise('${ex.id}',-1)"><i class="ti ti-chevron-up"></i></button>
+          <button class="bo" onclick="moveExercise('${ex.id}',1)"><i class="ti ti-chevron-down"></i></button>
+        </div>
+        <div class="diff-select" style="margin-left:auto">
+          ${DIFFS.map(d=>`<span class="diff-opt ${d}${ex.difficulty===d?' sel':''}" onclick="exF('${ex.id}','difficulty','${d}');renderExercises()">${DIFF_LBL[d]}</span>`).join('')}
+        </div>
+      </div>
+      <div class="r2" style="margin-bottom:.6rem">
+        <div class="fg"><label class="fl">Nomi (UZ)</label><input class="inp" value="${ex.name_uz||''}" onchange="exF('${ex.id}','name_uz',this.value)"></div>
+        <div class="fg"><label class="fl">Nomi (RU)</label><input class="inp" value="${ex.name_ru||''}" onchange="exF('${ex.id}','name_ru',this.value)"></div>
+      </div>
+      <div class="r2" style="margin-bottom:.6rem">
+        <div class="fg"><label class="fl">Takror / vaqt (masalan: 3x8 yoki 30 soniya)</label><input class="inp" value="${ex.reps||''}" onchange="exF('${ex.id}','reps',this.value)"></div>
+        <div class="fg"><label class="fl">GIF/rasm URL</label><input class="inp" value="${ex.gifUrl||''}" placeholder="https://..." onchange="exF('${ex.id}','gifUrl',this.value)"></div>
+      </div>
+      <div class="r2" style="margin-bottom:.6rem">
+        <div class="fg"><label class="fl">Qisqa tavsif (UZ)</label><input class="inp" value="${ex.desc_uz||''}" onchange="exF('${ex.id}','desc_uz',this.value)"></div>
+        <div class="fg"><label class="fl">Qisqa tavsif (RU)</label><input class="inp" value="${ex.desc_ru||''}" onchange="exF('${ex.id}','desc_ru',this.value)"></div>
+      </div>
+      <div class="r2" style="margin-bottom:.6rem">
+        <div>
+          <label class="fl">Bosqichlar (UZ)</label>
+          <div id="steps-uz-${ex.id}">${stepsUz.map((s,i)=>`<div class="step-row"><input class="inp" value="${s}" onchange="updStep('${ex.id}','uz',${i},this.value)"><button class="bd" onclick="rmStep('${ex.id}','uz',${i})"><i class="ti ti-x"></i></button></div>`).join('')}</div>
+          <button class="bg" onclick="addStep('${ex.id}','uz')"><i class="ti ti-plus"></i> Bosqich qo'shish</button>
+        </div>
+        <div>
+          <label class="fl">Bosqichlar (RU)</label>
+          <div id="steps-ru-${ex.id}">${stepsRu.map((s,i)=>`<div class="step-row"><input class="inp" value="${s}" onchange="updStep('${ex.id}','ru',${i},this.value)"><button class="bd" onclick="rmStep('${ex.id}','ru',${i})"><i class="ti ti-x"></i></button></div>`).join('')}</div>
+          <button class="bg" onclick="addStep('${ex.id}','ru')"><i class="ti ti-plus"></i> Bosqich qo'shish</button>
+        </div>
+      </div>
+      <div class="r2" style="margin-bottom:.6rem">
+        <div class="fg"><label class="fl">Maslahat (UZ)</label><input class="inp" value="${ex.tip_uz||''}" onchange="exF('${ex.id}','tip_uz',this.value)"></div>
+        <div class="fg"><label class="fl">Maslahat (RU)</label><input class="inp" value="${ex.tip_ru||''}" onchange="exF('${ex.id}','tip_ru',this.value)"></div>
+      </div>
+      <div class="ex-actions">
+        <button class="bs" onclick="saveExercise('${ex.id}')"><i class="ti ti-device-floppy"></i>Saqlash</button>
+        <button class="bd" onclick="delExercise('${ex.id}')"><i class="ti ti-trash"></i>O'chirish</button>
+      </div>
+    </div>`;
+  });
+  if(!exs.length) html = `<div style="text-align:center;padding:2rem;color:#787c86;font-size:13px">${curElTab? "Bu element uchun hali mashq yo'q. \"Yangi mashq\" tugmasini bosing." : "Avval element tanlang."}</div>`;
+  document.getElementById('ex-list').innerHTML = html;
+}
+function setExTab(id){ curElTab=id; renderExercises(); }
+function exF(id,field,val){ const ex=D.exercises.find(e=>e.id===id); if(ex) ex[field]=val; }
+function updStep(id,l,i,val){ const ex=D.exercises.find(e=>e.id===id); if(!ex) return; const key='steps_'+l; const steps=(ex[key]||'').split('|'); steps[i]=val; ex[key]=steps.join('|'); }
+function addStep(id,l){ const ex=D.exercises.find(e=>e.id===id); if(!ex) return; const key='steps_'+l; const steps=(ex[key]||'').split('|').filter(Boolean); steps.push(''); ex[key]=steps.join('|'); renderExercises(); }
+function rmStep(id,l,i){ const ex=D.exercises.find(e=>e.id===id); if(!ex) return; const key='steps_'+l; const steps=(ex[key]||'').split('|').filter(Boolean); steps.splice(i,1); ex[key]=steps.join('|'); renderExercises(); }
+function addExercise(){
+  if(!curElTab){ toast('Avval elementni tanlang','red'); return; }
+  const exs = (D.exercises||[]).filter(x=>String(x.elementId)===String(curElTab));
+  const ne = {id:'EX'+Date.now(), elementId:curElTab, order:exs.length, name_uz:'', name_ru:'', reps:'', gifUrl:'', desc_uz:'', desc_ru:'', steps_uz:'', steps_ru:'', tip_uz:'', tip_ru:'', difficulty:'normal'};
+  if(!D.exercises) D.exercises=[];
+  D.exercises.push(ne);
+  renderExercises(); renderDash();
+}
+async function saveExercise(id){
+  const ex = D.exercises.find(e=>e.id===id); if(!ex) return;
+  if(!ex.name_uz){ toast("Nomi (UZ) to'ldirilishi kerak",'red'); return; }
+  load(true);
+  const res = await apiPost({action:'save_exercise', exercise:ex});
+  load(false);
+  if(res && res.ok){ toast('Saqlandi'); } else toast('Xatolik','red');
+}
+async function delExercise(id){
+  if(!confirm('Bu mashqni o\'chirmoqchimisiz?')) return;
+  load(true);
+  const res = await apiPost({action:'delete_exercise', id});
+  load(false);
+  if(res && res.ok){ D.exercises=D.exercises.filter(e=>e.id!==id); renderExercises(); renderDash(); toast("O'chirildi"); } else toast('Xatolik','red');
+}
+function moveExercise(id,dir){
+  const exs = (D.exercises||[]).filter(x=>String(x.elementId)===String(curElTab)).sort((a,b)=>(a.order||0)-(b.order||0));
+  const idx = exs.findIndex(e=>e.id===id);
+  const swapIdx = idx+dir;
+  if(swapIdx<0 || swapIdx>=exs.length) return;
+  const a=exs[idx], b=exs[swapIdx];
+  const tmp=a.order||0; a.order=b.order||0; b.order=tmp;
+  renderExercises();
+  apiPost({action:'save_exercise',exercise:a}); apiPost({action:'save_exercise',exercise:b});
+}
+
+// ================================================================
+// FAQ
+// ================================================================
+function renderFaq(){
+  const faqs = D.faq||[];
+  let h='';
+  faqs.forEach((f,i)=>{
+    h += `<div class="faqb">
+      <div class="r2" style="margin-bottom:.6rem">
+        <div class="fg"><label class="fl">Savol (UZ)</label><input class="inp" value="${f.q_uz||''}" onchange="D.faq[${i}].q_uz=this.value"></div>
+        <div class="fg"><label class="fl">Savol (RU)</label><input class="inp" value="${f.q_ru||''}" onchange="D.faq[${i}].q_ru=this.value"></div>
+      </div>
+      <div class="r2">
+        <div class="fg"><label class="fl">Javob (UZ)</label><textarea class="ta" style="min-height:52px" onchange="D.faq[${i}].a_uz=this.value">${f.a_uz||''}</textarea></div>
+        <div class="fg"><label class="fl">Javob (RU)</label><textarea class="ta" style="min-height:52px" onchange="D.faq[${i}].a_ru=this.value">${f.a_ru||''}</textarea></div>
+      </div>
+      <button class="bd" onclick="delFaq(${i})"><i class="ti ti-trash"></i>O'chirish</button>
+    </div>`;
+  });
+  if(!faqs.length) h = `<div style="text-align:center;padding:1.5rem;color:#787c86;font-size:13px">Hali savol qo'shilmagan.</div>`;
+  h += `<button class="bs" onclick="saveFaqAll()"><i class="ti ti-device-floppy"></i>Barchasini saqlash</button>`;
+  document.getElementById('faq-list').innerHTML = h;
+}
+function addFaq(){ if(!D.faq) D.faq=[]; D.faq.push({id:'F'+Date.now(),q_uz:'',a_uz:'',q_ru:'',a_ru:''}); renderFaq(); }
+function delFaq(i){ D.faq.splice(i,1); renderFaq(); }
+async function saveFaqAll(){
+  load(true);
+  const res = await apiPost({action:'save_faq', faq:D.faq});
+  load(false);
+  if(res && res.ok){ toast('Saqlandi'); renderDash(); } else toast('Xatolik','red');
+}
+
+// ================================================================
+// SETTINGS
+// ================================================================
+function fillSettings(){
+  const s = D.settings||{};
+  document.getElementById('ac-client-id').value = s.google_client_id||'';
+  document.getElementById('ac-channel-id').value = s.youtube_channel_id||'';
+  document.getElementById('ac-channel-url').value = s.youtube_channel_url||'';
+  document.getElementById('cp-link').value = s.telegram_competition_link||'';
+  document.getElementById('st-name-uz').value = s.app_name_uz||'LEVEL UP';
+  document.getElementById('st-name-ru').value = s.app_name_ru||'LEVEL UP';
+}
+async function saveAccessSettings(){
+  const settings = {
+    google_client_id: document.getElementById('ac-client-id').value.trim(),
+    youtube_channel_id: document.getElementById('ac-channel-id').value.trim(),
+    youtube_channel_url: document.getElementById('ac-channel-url').value.trim()
+  };
+  load(true);
+  const res = await apiPost({action:'save_settings', settings});
+  load(false);
+  if(res && res.ok){ Object.assign(D.settings, settings); toast('Saqlandi'); } else toast('Xatolik','red');
+}
+async function saveCompetitionSettings(){
+  const settings = { telegram_competition_link: document.getElementById('cp-link').value.trim() };
+  load(true);
+  const res = await apiPost({action:'save_settings', settings});
+  load(false);
+  if(res && res.ok){ Object.assign(D.settings, settings); toast('Saqlandi'); } else toast('Xatolik','red');
+}
+async function saveAppSettings(){
+  const settings = { app_name_uz: document.getElementById('st-name-uz').value.trim(), app_name_ru: document.getElementById('st-name-ru').value.trim() };
+  load(true);
+  const res = await apiPost({action:'save_settings', settings});
+  load(false);
+  if(res && res.ok){ Object.assign(D.settings, settings); toast('Saqlandi'); } else toast('Xatolik','red');
+}
+async function changePass(){
+  const p1=document.getElementById('st-p1').value, p2=document.getElementById('st-p2').value;
+  if(!p1 || p1!==p2){ toast('Parollar mos emas','red'); return; }
+  load(true);
+  const res = await apiPost({action:'change_password', newPass:p1});
+  load(false);
+  if(res && res.ok){ PASS=p1; toast('Parol yangilandi'); document.getElementById('st-p1').value=''; document.getElementById('st-p2').value=''; } else toast('Xatolik','red');
+}
+
+// ================================================================
+// HELPERS
+// ================================================================
+function load(on){ document.getElementById('loading').className='loading'+(on?' show':''); }
+function toast(msg,color){
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.style.background = color==='red' ? '#ef4a4a' : '#3ecf6e';
+  el.style.color = color==='red' ? '#fff' : '#08240f';
+  el.style.display='block';
+  setTimeout(()=>el.style.display='none', 2200);
+}
+</script>
+</body>
+</html>
