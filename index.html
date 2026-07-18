@@ -6,7 +6,6 @@
 <title>LEVEL UP — Calisthenics</title>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.14.0/dist/tabler-icons.min.css">
-<script src="https://accounts.google.com/gsi/client" async defer onload="window.__gisReady=true"></script>
 <style>
 :root{
   --bg:#121317;
@@ -104,6 +103,10 @@ h1,h2,h3,.disp{font-family:'Oswald',sans-serif;text-transform:uppercase;letter-s
 .btn-faq .ic{width:44px;height:44px;border-radius:11px;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
 .btn-faq .tt{font-size:14.5px;font-weight:700}
 .btn-faq .ds{font-size:11.5px;color:var(--muted);margin-top:1px}
+.btn-yt-menu{display:flex;align-items:center;gap:.85rem;padding:1.05rem 1.1rem;background:linear-gradient(120deg,#3a1414,#2a1010);border:1px solid #5a2020;border-radius:14px;cursor:pointer;text-decoration:none;color:var(--text)}
+.btn-yt-menu .ic{width:44px;height:44px;border-radius:11px;background:#ff0033;display:flex;align-items:center;justify-content:center;font-size:21px;color:#fff;flex-shrink:0}
+.btn-yt-menu .tt{font-size:14.5px;font-weight:700}
+.btn-yt-menu .ds{font-size:11.5px;color:#d99a9a;margin-top:1px}
 .chev{margin-left:auto;color:#5b606b;flex-shrink:0}
 
 /* ELEMENT DETAIL */
@@ -169,57 +172,15 @@ h1,h2,h3,.disp{font-family:'Oswald',sans-serif;text-transform:uppercase;letter-s
   <button class="lang-btn" id="lb-ru" onclick="setLang('ru')">RU</button>
 </div>
 
-<!-- GATE (sign-in) -->
-<div class="screen active" id="s-gate">
-  <div class="gate-hero">
-    <div class="gate-badge">🔥 Calisthenics Levels</div>
-    <div class="gate-h1" id="g-h1">O'Z<br><span>DARAJANGNI</span><br>OSHIR</div>
-    <div class="gate-p" id="g-p">Handstand, Planche, Front Lever va boshqa elementlarni bosqichma-bosqich, videolar bilan o'rganing.</div>
-  </div>
-  <div class="gate-levels">
-    <div class="gl-chip"><span class="gl-dot" style="background:var(--easy)"></span><span id="lv-easy">Oson</span></div>
-    <div class="gl-chip"><span class="gl-dot" style="background:var(--norm)"></span><span id="lv-norm">O'rta</span></div>
-    <div class="gl-chip"><span class="gl-dot" style="background:var(--hard)"></span><span id="lv-hard">Qiyin</span></div>
-  </div>
-  <div class="gate-body">
-    <div class="gate-steps" id="gate-steps">
-      <div class="gs-item"><span class="gs-num">1</span><span id="gs-1">Google hisobingiz bilan kiring</span></div>
-      <div class="gs-item"><span class="gs-num">2</span><span id="gs-2">Quyidagi tugma orqali kanalimizga obuna bo'ling</span></div>
-      <div class="gs-item"><span class="gs-num">3</span><span id="gs-3">"Tekshirish" tugmasini bosing — obuna bo'lsangiz, ilova ochiladi</span></div>
-    </div>
-    <a class="btn-yt" id="gate-yt-link" href="#" target="_blank"><i class="ti ti-brand-youtube"></i> <span id="gate-yt-text">Kanalga obuna bo'lish</span></a>
-    <button class="btn-gsi" onclick="signIn()"><img src="https://www.gstatic.com/marketing-cms/assets/images/d5/dc/cfe9ce8b4425b410b49b7f2dd953/g.webp=n-w48" onerror="this.style.display='none'"> <span id="g-btn">Google orqali kirish va tekshirish</span></button>
-    <div class="gate-disc" id="g-disc">Ilovadan foydalanish uchun YouTube kanalimizga obuna bo'lishingiz kerak. Bu — tekin, lekin obuna talab qilinadi.</div>
-  </div>
-</div>
-
-<!-- LOCKED -->
-<div class="screen" id="s-locked">
-  <div class="lock-wrap">
-    <div class="lock-icon"><i class="ti ti-lock"></i></div>
-    <div class="lock-title" id="lk-title">Obuna kerak</div>
-    <div class="lock-desc" id="lk-desc">Ilovaga kirish uchun avval bizning YouTube kanalimizga obuna bo'ling. Obuna bo'lgach, "Tekshirish" tugmasini bosing.</div>
-    <div class="lock-profile" id="lk-profile" style="display:none">
-      <img id="lk-pic" src="" alt="">
-      <div><div class="pn" id="lk-name"></div><div class="pe" id="lk-email"></div></div>
-    </div>
-    <a class="btn-yt" id="lk-yt-link" href="#" target="_blank"><i class="ti ti-brand-youtube"></i> <span id="lk-yt-text">Kanalga obuna bo'lish</span></a>
-    <button class="btn-recheck" onclick="checkSubscription(false)"><i class="ti ti-refresh"></i> <span id="lk-recheck">Obunani tekshirish</span></button>
-    <button class="btn-signout" onclick="signOut()" id="lk-signout">Chiqish</button>
-  </div>
-</div>
-
 <!-- HOME -->
-<div class="screen" id="s-home">
+<div class="screen active" id="s-home">
   <div class="home-header">
     <div class="home-top">
-      <img class="home-avatar" id="h-avatar" src="" style="display:none">
-      <div class="home-avatar-fallback" id="h-avatar-fb">🏋️</div>
+      <div class="home-avatar-fallback">🏋️</div>
       <div>
-        <div class="home-name" id="h-name">Sportchi</div>
-        <div class="home-tag"><i class="ti ti-circle-check-filled"></i><span id="h-sub">Obuna faol</span></div>
+        <div class="home-name" id="h-name">LEVEL UP</div>
+        <div class="home-tag"><i class="ti ti-flame"></i><span id="h-sub">Calisthenics Levels</span></div>
       </div>
-      <div class="home-signout" onclick="signOut()"><i class="ti ti-logout"></i></div>
     </div>
   </div>
   <div class="section-lbl" id="sec-elements">Elementlar</div>
@@ -234,6 +195,11 @@ h1,h2,h3,.disp{font-family:'Oswald',sans-serif;text-transform:uppercase;letter-s
     <a class="btn-comp" id="btn-comp" href="#" target="_blank">
       <div class="ic"><i class="ti ti-brand-telegram"></i></div>
       <div><div class="tt" id="bc-title">Onlayn musobaqa</div><div class="ds" id="bc-desc">Telegram guruhga qo'shiling</div></div>
+      <i class="ti ti-chevron-right chev"></i>
+    </a>
+    <a class="btn-yt-menu" id="btn-yt-menu" href="#" target="_blank">
+      <div class="ic"><i class="ti ti-brand-youtube"></i></div>
+      <div><div class="tt" id="by-title">YouTube kanal</div><div class="ds" id="by-desc">Obuna bo'ling, yangi videolarni ko'ring</div></div>
       <i class="ti ti-chevron-right chev"></i>
     </a>
     <button class="btn-faq" onclick="SS('s-faq')">
@@ -274,12 +240,12 @@ h1,h2,h3,.disp{font-family:'Oswald',sans-serif;text-transform:uppercase;letter-s
 // ================================================================
 // CONFIG — Apps Script backend URL (Google Sheets)
 // ================================================================
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwIeCRMy4ijTRSzOtvHlTljr_jyWsBNazsJEtDjdBWhDa1EB8ksNyejv_e5tEeApPgR/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxV2Qo32uogf5L_VCn3tw1NeXsUB_Ek48twRy2cYcLM9gXS2rfJ9aR74OefSrn80YbvzA/exec';
 // ================================================================
 
 let lang = localStorage.getItem('cal_lang') || 'uz';
 let D = {settings:{}, elements:[], exercises:[], faq:[]};
-let accessToken = null, profile = null, tokenClient = null, curElement = null;
+let curElement = null;
 
 const DIFF = {
   easy:{uz:"Oson",ru:"Легко",cls:'diff-easy'},
@@ -294,6 +260,7 @@ const T = {
     lkyt:"Kanalga obuna bo'lish", lkrecheck:"Obunani tekshirish", lksignout:"Chiqish",
     secel:"Elementlar", secmore:"Ko'proq", hsub:"Obuna faol",
     bctitle:"Onlayn musobaqa", bcdesc:"Telegram guruhga qo'shiling", bftitle:"Savollar", bfdesc:"Ko'p so'raladigan savollar",
+    bytitle:"YouTube kanal", bydesc:"Obuna bo'ling, yangi videolarni ko'ring",
     noel:"Elementlar hali qo'shilmagan", noex:"Bu element uchun mashqlar hali qo'shilmagan",
     asktitle:"Boshqa savol bormi?", asksend:"Jo'natish", faqtitle:"Savollar", askph:"Savolingizni yozing...",
     exercises:"mashq", notsub:"Obuna tasdiqlanmadi. Kanalga obuna bo'lib, qayta urinib ko'ring.",
@@ -305,6 +272,7 @@ const T = {
     lkyt:"Подписаться на канал", lkrecheck:"Проверить подписку", lksignout:"Выйти",
     secel:"Элементы", secmore:"Ещё", hsub:"Подписка активна",
     bctitle:"Онлайн-соревнование", bcdesc:"Присоединяйтесь в Telegram", bftitle:"Вопросы", bfdesc:"Часто задаваемые вопросы",
+    bytitle:"YouTube канал", bydesc:"Подпишитесь, смотрите новые видео",
     noel:"Элементы ещё не добавлены", noex:"Упражнения для этого элемента ещё не добавлены",
     asktitle:"Остались вопросы?", asksend:"Отправить", faqtitle:"Вопросы", askph:"Напишите свой вопрос...",
     exercises:"упражнений", notsub:"Подписка не подтверждена. Подпишитесь на канал и попробуйте снова.",
@@ -318,26 +286,14 @@ function spin(on,msg){ document.getElementById('spinner').className='spinner'+(o
 function setLang(l){ lang=l; localStorage.setItem('cal_lang',l); document.getElementById('lb-uz').classList.toggle('active',l==='uz'); document.getElementById('lb-ru').classList.toggle('active',l==='ru'); applyLang(); renderAll(); }
 
 function applyLang(){
-  document.getElementById('g-h1').innerHTML=t('h1');
-  document.getElementById('g-p').textContent=t('gp');
-  document.getElementById('g-btn').textContent=t('gbtn2');
-  document.getElementById('g-disc').textContent=t('gdisc');
-  document.getElementById('gs-1').textContent=t('gs1');
-  document.getElementById('gs-2').textContent=t('gs2');
-  document.getElementById('gs-3').textContent=t('gs3');
-  document.getElementById('gate-yt-text').textContent=t('ytlink');
   document.getElementById('lv-easy').textContent=DIFF.easy[lang]; document.getElementById('lv-norm').textContent=DIFF.normal[lang]; document.getElementById('lv-hard').textContent=DIFF.hard[lang];
   document.getElementById('lg-easy').textContent=DIFF.easy[lang]; document.getElementById('lg-norm').textContent=DIFF.normal[lang]; document.getElementById('lg-hard').textContent=DIFF.hard[lang];
-  document.getElementById('lk-title').textContent=t('lktitle');
-  document.getElementById('lk-desc').textContent=t('lkdesc');
-  document.getElementById('lk-yt-text').textContent=t('lkyt');
-  document.getElementById('lk-recheck').textContent=t('lkrecheck');
-  document.getElementById('lk-signout').textContent=t('lksignout');
   document.getElementById('sec-elements').textContent=t('secel');
   document.getElementById('sec-more').textContent=t('secmore');
-  document.getElementById('h-sub').textContent=t('hsub');
   document.getElementById('bc-title').textContent=t('bctitle');
   document.getElementById('bc-desc').textContent=t('bcdesc');
+  document.getElementById('by-title').textContent=t('bytitle');
+  document.getElementById('by-desc').textContent=t('bydesc');
   document.getElementById('bf-title').textContent=t('bftitle');
   document.getElementById('bf-desc').textContent=t('bfdesc');
   document.getElementById('ask-title').innerHTML='<i class="ti ti-message-question"></i> '+t('asktitle');
@@ -363,81 +319,10 @@ async function loadData(){
     const res = await api('get_all');
     if(res && res.ok) D = res.data;
   }catch(e){ console.error('Backend error',e); }
-  const url = (D.settings&&D.settings.youtube_channel_url) || (D.settings&&D.settings.youtube_channel_id ? `https://www.youtube.com/channel/${D.settings.youtube_channel_id}` : '#');
-  document.getElementById('gate-yt-link').href = url;
-}
-
-// ================================================================
-// GOOGLE SIGN-IN + YOUTUBE SUBSCRIPTION CHECK
-// ================================================================
-function initTokenClient(){
-  const clientId = (D.settings&&D.settings.google_client_id)||'';
-  tokenClient = google.accounts.oauth2.initTokenClient({
-    client_id: clientId,
-    scope: 'openid email profile https://www.googleapis.com/auth/youtube.readonly',
-    callback: async (resp)=>{
-      if(resp && resp.access_token){
-        accessToken = resp.access_token;
-        spin(true, lang==='ru'?'Проверяем подписку...':'Obuna tekshirilmoqda...');
-        await fetchProfile();
-        await checkSubscription(true);
-        spin(false);
-      }
-    }
-  });
-}
-function signIn(){
-  if(!window.__gisReady || typeof google==='undefined'){ alert(lang==='ru'?'Google сервис ещё загружается, попробуйте снова через пару секунд.':'Google xizmati hali yuklanmoqda, birozdan keyin qayta urining.'); return; }
-  if(!tokenClient) initTokenClient();
-  tokenClient.requestAccessToken({prompt:'consent'});
-}
-function signOut(){
-  localStorage.removeItem('cal_auth');
-  accessToken=null; profile=null;
-  if(window.google && google.accounts && google.accounts.oauth2 && accessToken){ google.accounts.oauth2.revoke(accessToken,()=>{}); }
-  SS('s-gate');
-}
-async function fetchProfile(){
-  try{
-    const r = await fetch('https://www.googleapis.com/oauth2/v3/userinfo',{headers:{Authorization:'Bearer '+accessToken}});
-    const j = await r.json();
-    profile = {name:j.name, picture:j.picture, email:j.email};
-  }catch(e){ profile=null; }
-}
-async function checkSubscription(fromSignIn){
-  const chId = (D.settings&&D.settings.youtube_channel_id)||'';
-  showLockedProfile();
-  if(!accessToken){ SS('s-locked'); return; }
-  if(!chId){ SS('s-locked'); return; }
-  try{
-    const r = await fetch(`https://www.googleapis.com/youtube/v3/subscriptions?part=snippet&mine=true&forChannelId=${encodeURIComponent(chId)}`,{headers:{Authorization:'Bearer '+accessToken}});
-    const j = await r.json();
-    const subscribed = !!(j.items && j.items.length);
-    localStorage.setItem('cal_auth', JSON.stringify({subscribed, ts:Date.now(), profile}));
-    if(subscribed){ goHome(); } else { SS('s-locked'); }
-  }catch(e){
-    SS('s-locked');
-  }
-}
-function showLockedProfile(){
-  if(profile){
-    document.getElementById('lk-profile').style.display='flex';
-    document.getElementById('lk-pic').src=profile.picture||'';
-    document.getElementById('lk-name').textContent=profile.name||'';
-    document.getElementById('lk-email').textContent=profile.email||'';
-  }
-  const url = (D.settings&&D.settings.youtube_channel_url) || (D.settings&&D.settings.youtube_channel_id ? `https://www.youtube.com/channel/${D.settings.youtube_channel_id}` : '#');
-  document.getElementById('lk-yt-link').href = url;
-}
-function goHome(){
-  if(profile){
-    if(profile.picture){ document.getElementById('h-avatar').src=profile.picture; document.getElementById('h-avatar').style.display='block'; document.getElementById('h-avatar-fb').style.display='none'; }
-    document.getElementById('h-name').textContent = profile.name || (lang==='ru'?'Спортсмен':'Sportchi');
-  }
-  renderElements();
+  const ytUrl = (D.settings&&D.settings.youtube_channel_url) || '#';
+  document.getElementById('btn-yt-menu').href = ytUrl;
   const tg = (D.settings&&D.settings.telegram_competition_link)||'#';
   document.getElementById('btn-comp').href = tg;
-  SS('s-home');
 }
 
 // ================================================================
@@ -607,18 +492,7 @@ window.onload = async ()=>{
   await loadData();
   spin(false);
   renderElements(); renderFaq();
-
-  const cached = JSON.parse(localStorage.getItem('cal_auth')||'null');
-  if(cached && cached.subscribed){
-    profile = cached.profile;
-    goHome();
-    // silently re-verify in background if cache is older than 24h
-    if(Date.now()-cached.ts > 24*60*60*1000){
-      // will require a fresh sign-in when the user re-opens s-gate manually; passive for now
-    }
-    return;
-  }
-  SS('s-gate');
+  SS('s-home');
 };
 </script>
 </body>
