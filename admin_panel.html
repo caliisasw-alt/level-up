@@ -37,6 +37,7 @@ body{font-family:'Inter',sans-serif;background:#0f1013;color:#e7e8ec;min-height:
 .ni:hover{background:#1c1e24;color:#e7e8ec}
 .ni.active{background:#1c1e24;color:#f2b134;border-left-color:#f2b134;font-weight:600}
 .ni i{font-size:17px;flex-shrink:0}
+.ni-badge{margin-left:auto;background:#ef4a4a;color:#fff;font-size:10px;font-weight:700;padding:1px 6px;border-radius:10px;flex-shrink:0}
 .mc{margin-left:250px;padding:1.75rem;min-height:100vh}
 .top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.75rem;gap:1rem}
 .ptitle{font-family:'Oswald',sans-serif;font-size:22px;font-weight:700;text-transform:uppercase}
@@ -49,10 +50,11 @@ body{font-family:'Inter',sans-serif;background:#0f1013;color:#e7e8ec;min-height:
 .ach{padding:.9rem 1.1rem;border-bottom:1px solid #26282f;display:flex;align-items:center;justify-content:space-between;gap:.75rem}
 .act{font-size:14px;font-weight:700;display:flex;align-items:center;gap:.5rem}
 .acb{padding:1.1rem}
-.sg{display:grid;grid-template-columns:repeat(3,1fr);gap:.85rem;margin-bottom:1.5rem}
+.sg{display:grid;grid-template-columns:repeat(4,1fr);gap:.85rem;margin-bottom:1.5rem}
 .sc{background:#16171c;border:1px solid #26282f;border-radius:12px;padding:1.1rem}
 .scl{font-size:11px;color:#787c86;margin-bottom:.4rem;display:flex;align-items:center;gap:4px}
 .scv{font-family:'Oswald',sans-serif;font-size:26px;font-weight:700}
+.sc.warn .scv{color:#f2b134}
 
 .fl{font-size:12px;color:#9a9ea8;margin-bottom:.3rem;display:block;font-weight:500}
 .inp{width:100%;padding:.6rem .85rem;background:#0f1013;border:1px solid #26282f;border-radius:8px;color:#e7e8ec;font-size:13px;font-family:'Inter',sans-serif}
@@ -78,10 +80,14 @@ body{font-family:'Inter',sans-serif;background:#0f1013;color:#e7e8ec;min-height:
 .loading.show{display:flex}
 
 /* ELEMENTS */
-.el-row{display:flex;align-items:center;gap:.7rem;background:#0f1013;border:1px solid #26282f;border-radius:10px;padding:.7rem .9rem;margin-bottom:.6rem}
-.el-row .inp{flex:1}
+.el-row{display:flex;align-items:center;gap:.7rem;background:#0f1013;border:1px solid #26282f;border-radius:10px;padding:.7rem .9rem;margin-bottom:.6rem;flex-wrap:wrap}
+.el-row .inp{flex:1;min-width:120px}
 .el-icon-inp{width:56px;text-align:center;flex-shrink:0;font-size:18px}
 .el-order-btns{display:flex;flex-direction:column;gap:2px;flex-shrink:0}
+.el-prem-toggle{display:flex;align-items:center;gap:5px;font-size:11px;color:#9a9ea8;flex-shrink:0;background:#191b20;border:1px solid #26282f;border-radius:7px;padding:.4rem .6rem;cursor:pointer;white-space:nowrap}
+.el-prem-toggle input{accent-color:#f2b134;cursor:pointer}
+.el-prem-toggle.on{border-color:#f2b134;color:#f2b134}
+.el-price-inp{width:90px;flex-shrink:0}
 
 /* EXERCISES */
 .el-tabs{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.1rem}
@@ -113,6 +119,22 @@ body{font-family:'Inter',sans-serif;background:#0f1013;color:#e7e8ec;min-height:
 
 .faqb{background:#0f1013;border:1px solid #26282f;border-radius:10px;padding:.9rem;margin-bottom:.6rem}
 .info-note{background:#0f1013;border-radius:8px;padding:1rem;font-size:13px;line-height:1.8;color:#9a9ea8;border-left:3px solid #f2b134}
+
+/* PREMIUM REQUESTS */
+.req-row{background:#0f1013;border:1px solid #26282f;border-radius:10px;padding:.9rem 1rem;margin-bottom:.6rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
+.req-main{flex:1;min-width:200px}
+.req-el{font-size:13.5px;font-weight:700;display:flex;align-items:center;gap:6px}
+.req-meta{font-size:11.5px;color:#787c86;margin-top:3px;line-height:1.6}
+.req-meta b{color:#c3c5cb}
+.req-status{font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:20px;text-transform:uppercase;letter-spacing:.02em;flex-shrink:0}
+.req-status.pending{background:#2b1f14;color:#c98a4b}
+.req-status.approved{background:#12291d;color:#3ecf6e}
+.req-status.rejected{background:#2c1414;color:#ef4a4a}
+.req-actions{display:flex;gap:.5rem;flex-shrink:0}
+.req-empty{text-align:center;padding:2rem;color:#787c86;font-size:13px}
+.req-filter{display:flex;gap:.5rem;margin-bottom:1rem}
+.rf-btn{padding:.35rem .8rem;border:1.5px solid #26282f;border-radius:20px;font-size:12px;color:#9a9ea8;cursor:pointer;background:none}
+.rf-btn.sel{border-color:#f2b134;background:#2a220c;color:#f2b134;font-weight:700}
 </style>
 </head>
 <body>
@@ -141,9 +163,12 @@ body{font-family:'Inter',sans-serif;background:#0f1013;color:#e7e8ec;min-height:
       <button class="ni" onclick="ST('elements')"><i class="ti ti-category"></i>Elementlar</button>
       <button class="ni" onclick="ST('exercises')"><i class="ti ti-dumbbell"></i>Mashqlar</button>
       <button class="ni" onclick="ST('faq')"><i class="ti ti-help-circle"></i>Savollar (FAQ)</button>
+      <div class="ns">Premium</div>
+      <button class="ni" onclick="ST('requests')"><i class="ti ti-crown"></i>Premium so'rovlar<span class="ni-badge" id="req-badge" style="display:none">0</span></button>
       <div class="ns">Sozlamalar</div>
       <button class="ni" onclick="ST('access')"><i class="ti ti-brand-youtube"></i>YouTube kanal</button>
       <button class="ni" onclick="ST('competition')"><i class="ti ti-brand-telegram"></i>Onlayn musobaqa</button>
+      <button class="ni" onclick="ST('premsettings')"><i class="ti ti-crown"></i>Premium sozlamalari</button>
       <button class="ni" onclick="ST('settings')"><i class="ti ti-settings"></i>Ilova / Parol</button>
     </div>
   </div>
@@ -159,6 +184,7 @@ body{font-family:'Inter',sans-serif;background:#0f1013;color:#e7e8ec;min-height:
         <div class="sc"><div class="scl"><i class="ti ti-category"></i>Elementlar</div><div class="scv" id="ds-el">0</div></div>
         <div class="sc"><div class="scl"><i class="ti ti-dumbbell"></i>Mashqlar</div><div class="scv" id="ds-ex">0</div></div>
         <div class="sc"><div class="scl"><i class="ti ti-help-circle"></i>Savollar</div><div class="scv" id="ds-faq">0</div></div>
+        <div class="sc warn"><div class="scl"><i class="ti ti-crown"></i>Kutilayotgan so'rovlar</div><div class="scv" id="ds-req">0</div></div>
       </div>
       <div class="ac">
         <div class="ach"><div class="act"><i class="ti ti-info-circle" style="color:#f2b134"></i>Qanday ishlaydi</div></div>
@@ -166,8 +192,11 @@ body{font-family:'Inter',sans-serif;background:#0f1013;color:#e7e8ec;min-height:
           <div class="info-note">
             1. <b style="color:#e7e8ec">Elementlar</b> bo'limida yo'nalish (masalan: Handstand, Planche, Front Lever) qo'shasiz.<br>
             2. <b style="color:#e7e8ec">Mashqlar</b> bo'limida har bir element ichiga bosqichma-bosqich mashqlarni (GIF, takror soni, qiyinlik darajasi) qo'shasiz.<br>
-            3. Foydalanuvchi ilovaga kirishi uchun sizning YouTube kanalingizga obuna bo'lishi kerak — buni <b style="color:#e7e8ec">YouTube obuna</b> bo'limida sozlaysiz.<br>
-            4. <b style="color:#e7e8ec">Onlayn musobaqa</b> bo'limida Telegram guruh/kanal linkini kiriting — foydalanuvchilar shu link orqali musobaqaga qo'shiladi.
+            3. Har qanday elementni <b style="color:#e7e8ec">Premium</b> qilib belgilashingiz va narx qo'yishingiz mumkin — "Elementlar" bo'limida.<br>
+            4. Foydalanuvchi premium elementni ochish uchun so'rov yuborsa, sizga <b style="color:#e7e8ec">Telegram bot</b> orqali xabar keladi (sozlash uchun "Premium sozlamalari" bo'limiga qarang) va so'rov <b style="color:#e7e8ec">Premium so'rovlar</b> bo'limida ko'rinadi.<br>
+            5. To'lov masalasini hal qilgach, so'rovni <b style="color:#e7e8ec">"Tasdiqlash"</b> tugmasi bilan tasdiqlang — element o'sha foydalanuvchi uchun avtomatik ochiladi.<br>
+            6. Foydalanuvchi ilovaga kirishi uchun sizning YouTube kanalingizga obuna bo'lishi shart emas — "YouTube kanal" tugmasi orqali ixtiyoriy ravishda obuna bo'lishi mumkin.<br>
+            7. <b style="color:#e7e8ec">Onlayn musobaqa</b> bo'limida Telegram guruh/kanal linkini kiriting — foydalanuvchilar shu link orqali musobaqaga qo'shiladi.
           </div>
         </div>
       </div>
@@ -177,7 +206,10 @@ body{font-family:'Inter',sans-serif;background:#0f1013;color:#e7e8ec;min-height:
     <div class="ts" id="t-elements">
       <div class="ac">
         <div class="ach"><div class="act"><i class="ti ti-category"></i>Elementlar (yo'nalishlar)</div><button class="bp" onclick="addElement()"><i class="ti ti-plus"></i>Yangi element</button></div>
-        <div class="acb" id="elements-list"></div>
+        <div class="acb">
+          <div class="info-note" style="margin-bottom:1rem">Har bir element uchun "Premium" belgisini yoqib, narx kiritsangiz, u element ilovaning "Premium elementlar" bo'limida ko'rinadi va foydalanuvchi uni ochish uchun so'rov yuborishi kerak bo'ladi.</div>
+          <div id="elements-list"></div>
+        </div>
       </div>
     </div>
 
@@ -200,13 +232,29 @@ body{font-family:'Inter',sans-serif;background:#0f1013;color:#e7e8ec;min-height:
       </div>
     </div>
 
+    <!-- PREMIUM REQUESTS -->
+    <div class="ts" id="t-requests">
+      <div class="ac">
+        <div class="ach"><div class="act"><i class="ti ti-crown" style="color:#f2b134"></i>Premium so'rovlar</div><button class="bg" onclick="loadRequests()"><i class="ti ti-refresh"></i>Yangilash</button></div>
+        <div class="acb">
+          <div class="req-filter" id="req-filter">
+            <button class="rf-btn sel" onclick="setReqFilter('pending')" id="rf-pending">Kutilmoqda</button>
+            <button class="rf-btn" onclick="setReqFilter('approved')" id="rf-approved">Tasdiqlangan</button>
+            <button class="rf-btn" onclick="setReqFilter('rejected')" id="rf-rejected">Rad etilgan</button>
+            <button class="rf-btn" onclick="setReqFilter('all')" id="rf-all">Barchasi</button>
+          </div>
+          <div id="requests-list"></div>
+        </div>
+      </div>
+    </div>
+
     <!-- YOUTUBE -->
     <div class="ts" id="t-access">
       <div class="ac">
         <div class="ach"><div class="act"><i class="ti ti-brand-youtube" style="color:#ff0033"></i>YouTube kanal</div></div>
         <div class="acb">
           <div class="info-note" style="margin-bottom:1rem">
-            Ilova endi hech kimni majburiy obunaga majburlamaydi. Buning o'rniga, asosiy menyuda "YouTube kanal" tugmasi ko'rsatiladi — istagan foydalanuvchi shu orqali kanalingizga o'z ixtiyori bilan o'tib, obuna bo'lishi mumkin.
+            Ilova hech kimni majburiy obunaga majburlamaydi. Buning o'rniga, asosiy menyuda "YouTube kanal" tugmasi ko'rsatiladi — istagan foydalanuvchi shu orqali kanalingizga o'z ixtiyori bilan o'tib, obuna bo'lishi mumkin.
           </div>
           <div class="fg"><label class="fl">Kanal havolasi</label><input class="inp" id="ac-channel-url" placeholder="https://www.youtube.com/@sizningkanal"></div>
           <button class="bs" onclick="saveAccessSettings()"><i class="ti ti-device-floppy"></i>Saqlash</button>
@@ -222,6 +270,27 @@ body{font-family:'Inter',sans-serif;background:#0f1013;color:#e7e8ec;min-height:
           <div class="info-note" style="margin-bottom:1rem">Ilovadagi "Onlayn musobaqa" tugmasi bosilganda, foydalanuvchi shu Telegram guruh/kanal/bot havolasiga o'tadi — u yerda siz musobaqani o'tkazasiz.</div>
           <div class="fg"><label class="fl">Telegram havola</label><input class="inp" id="cp-link" placeholder="https://t.me/sizning_guruh"></div>
           <button class="bs" onclick="saveCompetitionSettings()"><i class="ti ti-device-floppy"></i>Saqlash</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- PREMIUM SETTINGS -->
+    <div class="ts" id="t-premsettings">
+      <div class="ac">
+        <div class="ach"><div class="act"><i class="ti ti-crown" style="color:#f2b134"></i>Premium sozlamalari</div></div>
+        <div class="acb">
+          <div class="info-note" style="margin-bottom:1rem">
+            Foydalanuvchi premium elementga so'rov yuborganda, siz Telegram bot orqali darhol xabar olishingiz uchun quyidagilarni sozlang:<br><br>
+            1. Telegramda <b style="color:#e7e8ec">@BotFather</b> ga yozing, <b style="color:#e7e8ec">/newbot</b> buyrug'ini yuboring va yangi bot yarating — sizga bot <b style="color:#e7e8ec">TOKEN</b> beriladi.<br>
+            2. Yaratgan botingizga Telegramda istalgan xabar yuboring (masalan "salom").<br>
+            3. Brauzerda quyidagi manzilni oching (TOKEN o'rniga o'zingiznikini qo'ying):<br>
+            <code style="color:#f2b134">https://api.telegram.org/bot&lt;TOKEN&gt;/getUpdates</code><br>
+            4. Javobda chiqqan <code style="color:#f2b134">"chat":{"id": ...}</code> qiymatini <b style="color:#e7e8ec">Chat ID</b> maydoniga kiriting.
+          </div>
+          <div class="fg"><label class="fl">Telegram bot token</label><input class="inp" id="ps-bot-token" placeholder="123456789:AAExample-Token"></div>
+          <div class="fg"><label class="fl">Telegram Chat ID (sizning shaxsiy ID'ingiz)</label><input class="inp" id="ps-chat-id" placeholder="123456789"></div>
+          <div class="fg"><label class="fl">Sizning Telegram username'ingiz (foydalanuvchiga ko'rsatiladi)</label><input class="inp" id="ps-admin-tg" placeholder="@sizning_username"></div>
+          <button class="bs" onclick="savePremiumSettings()"><i class="ti ti-device-floppy"></i>Saqlash</button>
         </div>
       </div>
     </div>
@@ -262,12 +331,13 @@ body{font-family:'Inter',sans-serif;background:#0f1013;color:#e7e8ec;min-height:
 // ============================================================
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxV2Qo32uogf5L_VCn3tw1NeXsUB_Ek48twRy2cYcLM9gXS2rfJ9aR74OefSrn80YbvzA/exec';
 // ============================================================
-let PASS='', curElTab=null, D={};
+let PASS='', curElTab=null, D={}, REQUESTS=[], reqFilter='pending';
 const DIFFS = ['easy','normal','hard'];
 const DIFF_LBL = {easy:"Oson", normal:"O'rta", hard:"Qiyin"};
 const MEDIA_LBL = {image:"🖼️ Rasm/GIF", video:"🎬 MP4 video", youtube:"▶️ YouTube"};
 const MEDIA_URL_LBL = {image:"GIF/rasm URL", video:"MP4 video URL (to'g'ridan-to'g'ri fayl havolasi)", youtube:"YouTube video havolasi"};
 const MEDIA_PLACEHOLDER = {image:"https://.../mashq.gif", video:"https://.../mashq.mp4", youtube:"https://www.youtube.com/watch?v=..."};
+const REQ_STATUS_LBL = {pending:"Kutilmoqda", approved:"Tasdiqlangan", rejected:"Rad etilgan"};
 
 window.onload = ()=>{
   // Har safar sahifa ochilganda faqat kod (parol) so'raladi — URL faylga allaqachon yozilgan.
@@ -312,10 +382,13 @@ async function loadAll(){
   try{
     const res = await api('get_all');
     if(res && res.ok) D = res.data;
+    const sres = await api('get_admin_settings');
+    if(sres && sres.ok) D.settings = sres.data;
   }catch(e){}
   load(false);
   if(!D.elements) D.elements=[]; if(!D.exercises) D.exercises=[]; if(!D.faq) D.faq=[]; if(!D.settings) D.settings={};
   renderDash(); renderElements(); renderExercises(); renderFaq(); fillSettings();
+  loadRequests();
 }
 
 function ST(id){
@@ -323,9 +396,10 @@ function ST(id){
   document.querySelectorAll('.ni').forEach(n=>n.classList.remove('active'));
   document.getElementById('t-'+id).classList.add('active');
   event.currentTarget.classList.add('active');
-  const titles={dash:['Dashboard',"Umumiy ko'rsatkichlar"],elements:['Elementlar',"Yo'nalishlarni boshqarish"],exercises:['Mashqlar',"Elementlar ichidagi mashqlar"],faq:['Savollar (FAQ)',"Ko'p so'raladigan savollar"],access:['YouTube kanal',"Kanal havolasini sozlash"],competition:['Onlayn musobaqa',"Telegram havolasi"],settings:['Ilova / Parol',"Umumiy sozlamalar"]};
+  const titles={dash:['Dashboard',"Umumiy ko'rsatkichlar"],elements:['Elementlar',"Yo'nalishlarni boshqarish"],exercises:['Mashqlar',"Elementlar ichidagi mashqlar"],faq:['Savollar (FAQ)',"Ko'p so'raladigan savollar"],requests:['Premium so\'rovlar',"Foydalanuvchilar so'rovlarini boshqarish"],access:['YouTube kanal',"Kanal havolasini sozlash"],competition:['Onlayn musobaqa',"Telegram havolasi"],premsettings:['Premium sozlamalari',"Telegram bot va aloqa ma'lumotlari"],settings:['Ilova / Parol',"Umumiy sozlamalar"]};
   document.getElementById('page-title').textContent=titles[id][0];
   document.getElementById('page-sub').textContent=titles[id][1];
+  if(id==='requests') loadRequests();
 }
 
 function renderDash(){
@@ -337,14 +411,20 @@ function renderDash(){
 // ================================================================
 // ELEMENTS
 // ================================================================
+function isPremiumEl(e){ return e.isPremium===true || String(e.isPremium).toUpperCase()==='TRUE'; }
 function renderElements(){
   const els = (D.elements||[]).slice().sort((a,b)=>(a.order||0)-(b.order||0));
   let h='';
   els.forEach((e,i)=>{
+    const prem = isPremiumEl(e);
     h+=`<div class="el-row">
       <input class="inp el-icon-inp" value="${e.icon||''}" placeholder="🤸" onchange="elF('${e.id}','icon',this.value)">
       <input class="inp" value="${e.name_uz||''}" placeholder="Nomi (UZ) — masalan Handstand" onchange="elF('${e.id}','name_uz',this.value)">
       <input class="inp" value="${e.name_ru||''}" placeholder="Nomi (RU)" onchange="elF('${e.id}','name_ru',this.value)">
+      <label class="el-prem-toggle${prem?' on':''}" id="pt-${e.id}">
+        <input type="checkbox" ${prem?'checked':''} onchange="elF('${e.id}','isPremium',this.checked);togglePremRow('${e.id}',this.checked)"> Premium
+      </label>
+      <input class="inp el-price-inp" value="${e.price||''}" placeholder="Narx" onchange="elF('${e.id}','price',this.value)">
       <div class="el-order-btns">
         <button class="bo" onclick="moveElement('${e.id}',-1)"><i class="ti ti-chevron-up"></i></button>
         <button class="bo" onclick="moveElement('${e.id}',1)"><i class="ti ti-chevron-down"></i></button>
@@ -356,9 +436,10 @@ function renderElements(){
   if(!els.length) h = `<div style="text-align:center;padding:2rem;color:#787c86;font-size:13px">Hali element qo'shilmagan. "Yangi element" tugmasini bosing.</div>`;
   document.getElementById('elements-list').innerHTML = h;
 }
+function togglePremRow(id,on){ const lbl=document.getElementById('pt-'+id); if(lbl) lbl.classList.toggle('on',on); }
 function elF(id,field,val){ const e=D.elements.find(x=>x.id===id); if(e) e[field]=val; }
 function addElement(){
-  const ne = {id:'EL'+Date.now(), name_uz:'', name_ru:'', icon:'🤸', order:(D.elements||[]).length};
+  const ne = {id:'EL'+Date.now(), name_uz:'', name_ru:'', icon:'🤸', order:(D.elements||[]).length, isPremium:false, price:''};
   if(!D.elements) D.elements=[];
   D.elements.push(ne);
   renderElements();
@@ -401,7 +482,7 @@ function renderExercises(){
   const els = (D.elements||[]).slice().sort((a,b)=>(a.order||0)-(b.order||0));
   if(!curElTab && els.length) curElTab = els[0].id;
   let tabs='';
-  els.forEach(e=>{ tabs+=`<button class="el-tab${String(e.id)===String(curElTab)?' sel':''}" onclick="setExTab('${e.id}')">${e.icon||''} ${e.name_uz||'—'}</button>`; });
+  els.forEach(e=>{ tabs+=`<button class="el-tab${String(e.id)===String(curElTab)?' sel':''}" onclick="setExTab('${e.id}')">${e.icon||''} ${e.name_uz||'—'}${isPremiumEl(e)?' 👑':''}</button>`; });
   document.getElementById('ex-el-tabs').innerHTML = tabs || `<span style="font-size:12px;color:#787c86">Avval "Elementlar" bo'limida element qo'shing.</span>`;
 
   const exs = (D.exercises||[]).filter(x=>String(x.elementId)===String(curElTab)).sort((a,b)=>(a.order||0)-(b.order||0));
@@ -535,12 +616,75 @@ async function saveFaqAll(){
 }
 
 // ================================================================
+// PREMIUM REQUESTS
+// ================================================================
+async function loadRequests(){
+  try{
+    const res = await api('get_requests');
+    if(res && res.ok) REQUESTS = res.data || [];
+  }catch(e){}
+  const pendingCount = REQUESTS.filter(r=>r.status==='pending').length;
+  document.getElementById('ds-req').textContent = pendingCount;
+  const badge = document.getElementById('req-badge');
+  if(pendingCount>0){ badge.style.display='inline-block'; badge.textContent=pendingCount; } else { badge.style.display='none'; }
+  renderRequests();
+}
+function setReqFilter(f){
+  reqFilter = f;
+  document.querySelectorAll('.rf-btn').forEach(b=>b.classList.remove('sel'));
+  document.getElementById('rf-'+f).classList.add('sel');
+  renderRequests();
+}
+function renderRequests(){
+  let list = REQUESTS;
+  if(reqFilter!=='all') list = REQUESTS.filter(r=>r.status===reqFilter);
+  let h='';
+  list.forEach(r=>{
+    const tg = (r.telegramUsername||'').replace('@','');
+    const ts = r.ts ? new Date(r.ts).toLocaleString('uz-UZ') : '';
+    h += `<div class="req-row">
+      <div class="req-main">
+        <div class="req-el">👑 ${r.elementName||r.elementId}</div>
+        <div class="req-meta">
+          Telegram: <b>${tg?('@'+tg):'—'}</b>${tg?` · <a href="https://t.me/${tg}" target="_blank" style="color:#229ed9">yozish</a>`:''}<br>
+          ${r.note?`Izoh: <b>${r.note}</b><br>`:''}
+          ${ts?`Sana: ${ts}`:''}
+        </div>
+      </div>
+      <span class="req-status ${r.status}">${REQ_STATUS_LBL[r.status]||r.status}</span>
+      <div class="req-actions">
+        ${r.status!=='approved'?`<button class="bs" onclick="approveReq('${r.id}')"><i class="ti ti-check"></i>Tasdiqlash</button>`:''}
+        ${r.status!=='rejected'?`<button class="bd" onclick="rejectReq('${r.id}')"><i class="ti ti-x"></i>Rad etish</button>`:''}
+      </div>
+    </div>`;
+  });
+  if(!list.length) h = `<div class="req-empty">Bu bo'limda so'rov yo'q.</div>`;
+  document.getElementById('requests-list').innerHTML = h;
+}
+async function approveReq(id){
+  load(true);
+  const res = await apiPost({action:'approve_request', id});
+  load(false);
+  if(res && res.ok){ toast('Tasdiqlandi — element foydalanuvchi uchun ochildi'); loadRequests(); } else toast('Xatolik','red');
+}
+async function rejectReq(id){
+  if(!confirm("Bu so'rovni rad etmoqchimisiz?")) return;
+  load(true);
+  const res = await apiPost({action:'reject_request', id});
+  load(false);
+  if(res && res.ok){ toast('Rad etildi'); loadRequests(); } else toast('Xatolik','red');
+}
+
+// ================================================================
 // SETTINGS
 // ================================================================
 function fillSettings(){
   const s = D.settings||{};
   document.getElementById('ac-channel-url').value = s.youtube_channel_url||'';
   document.getElementById('cp-link').value = s.telegram_competition_link||'';
+  document.getElementById('ps-bot-token').value = s.tg_bot_token||'';
+  document.getElementById('ps-chat-id').value = s.tg_chat_id||'';
+  document.getElementById('ps-admin-tg').value = s.admin_telegram_username||'';
   document.getElementById('st-name-uz').value = s.app_name_uz||'LEVEL UP';
   document.getElementById('st-name-ru').value = s.app_name_ru||'LEVEL UP';
 }
@@ -555,6 +699,17 @@ async function saveAccessSettings(){
 }
 async function saveCompetitionSettings(){
   const settings = { telegram_competition_link: document.getElementById('cp-link').value.trim() };
+  load(true);
+  const res = await apiPost({action:'save_settings', settings});
+  load(false);
+  if(res && res.ok){ Object.assign(D.settings, settings); toast('Saqlandi'); } else toast('Xatolik','red');
+}
+async function savePremiumSettings(){
+  const settings = {
+    tg_bot_token: document.getElementById('ps-bot-token').value.trim(),
+    tg_chat_id: document.getElementById('ps-chat-id').value.trim(),
+    admin_telegram_username: document.getElementById('ps-admin-tg').value.trim().replace('@','')
+  };
   load(true);
   const res = await apiPost({action:'save_settings', settings});
   load(false);
