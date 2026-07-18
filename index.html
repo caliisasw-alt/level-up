@@ -25,7 +25,7 @@
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Inter',sans-serif;background:#000;min-height:100vh}
-.app{max-width:480px;margin:0 auto;min-height:100vh;background:var(--bg);position:relative;color:var(--text);overflow:hidden}
+.app{max-width:480px;margin:0 auto;min-height:100vh;background:var(--bg);position:relative;color:var(--text)}
 .screen{display:none;min-height:100vh;padding-bottom:2rem}
 .screen.active{display:block}
 h1,h2,h3,.disp{font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.02em}
@@ -107,6 +107,10 @@ h1,h2,h3,.disp{font-family:'Oswald',sans-serif;text-transform:uppercase;letter-s
 .btn-yt-menu .ic{width:44px;height:44px;border-radius:11px;background:#ff0033;display:flex;align-items:center;justify-content:center;font-size:21px;color:#fff;flex-shrink:0}
 .btn-yt-menu .tt{font-size:14.5px;font-weight:700}
 .btn-yt-menu .ds{font-size:11.5px;color:#d99a9a;margin-top:1px}
+.btn-elements{display:flex;align-items:center;gap:.85rem;padding:1.05rem 1.1rem;background:linear-gradient(120deg,#2a220c,#1c1e25);border:1px solid var(--gold-dim);border-radius:14px;cursor:pointer;color:var(--text);width:100%}
+.btn-elements .ic{width:44px;height:44px;border-radius:11px;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:20px;color:#1a1305;flex-shrink:0}
+.btn-elements .tt{font-size:14.5px;font-weight:700}
+.btn-elements .ds{font-size:11.5px;color:var(--muted);margin-top:1px}
 .chev{margin-left:auto;color:#5b606b;flex-shrink:0}
 
 /* ELEMENT DETAIL */
@@ -184,12 +188,13 @@ h1,h2,h3,.disp{font-family:'Oswald',sans-serif;text-transform:uppercase;letter-s
     </div>
   </div>
   <div class="section-lbl" id="sec-elements">Elementlar</div>
-  <div class="legend">
-    <div class="leg-item"><span class="leg-dot" style="background:var(--easy)"></span><span id="lg-easy">Oson</span></div>
-    <div class="leg-item"><span class="leg-dot" style="background:var(--norm)"></span><span id="lg-norm">O'rta</span></div>
-    <div class="leg-item"><span class="leg-dot" style="background:var(--hard)"></span><span id="lg-hard">Qiyin</span></div>
+  <div class="action-row" style="padding-top:0">
+    <button class="btn-elements" onclick="SS('s-elements')">
+      <div class="ic"><i class="ti ti-category"></i></div>
+      <div><div class="tt" id="be-title">Barcha elementlar</div><div class="ds" id="be-count">0 ta element</div></div>
+      <i class="ti ti-chevron-right chev"></i>
+    </button>
   </div>
-  <div class="el-grid" id="el-grid"></div>
   <div class="section-lbl" id="sec-more">Ko'proq</div>
   <div class="action-row">
     <a class="btn-comp" id="btn-comp" href="#" target="_blank">
@@ -208,6 +213,17 @@ h1,h2,h3,.disp{font-family:'Oswald',sans-serif;text-transform:uppercase;letter-s
       <i class="ti ti-chevron-right chev"></i>
     </button>
   </div>
+</div>
+
+<!-- ALL ELEMENTS -->
+<div class="screen" id="s-elements">
+  <div class="tb"><div class="tb-back" onclick="SS('s-home')">←</div><div><div class="tb-title" id="els-title">Elementlar</div></div></div>
+  <div class="legend" style="padding-top:1rem">
+    <div class="leg-item"><span class="leg-dot" style="background:var(--easy)"></span><span id="lg-easy">Oson</span></div>
+    <div class="leg-item"><span class="leg-dot" style="background:var(--norm)"></span><span id="lg-norm">O'rta</span></div>
+    <div class="leg-item"><span class="leg-dot" style="background:var(--hard)"></span><span id="lg-hard">Qiyin</span></div>
+  </div>
+  <div class="el-grid" id="el-grid" style="padding-top:.75rem"></div>
 </div>
 
 <!-- ELEMENT DETAIL -->
@@ -259,6 +275,7 @@ const T = {
     lktitle:"Obuna kerak", lkdesc:"Ilovaga kirish uchun avval bizning YouTube kanalimizga obuna bo'ling. Obuna bo'lgach, \"Tekshirish\" tugmasini bosing.",
     lkyt:"Kanalga obuna bo'lish", lkrecheck:"Obunani tekshirish", lksignout:"Chiqish",
     secel:"Elementlar", secmore:"Ko'proq", hsub:"Obuna faol",
+    betitle:"Barcha elementlar", elstitle:"Elementlar",
     bctitle:"Onlayn musobaqa", bcdesc:"Telegram guruhga qo'shiling", bftitle:"Savollar", bfdesc:"Ko'p so'raladigan savollar",
     bytitle:"YouTube kanal", bydesc:"Obuna bo'ling, yangi videolarni ko'ring",
     noel:"Elementlar hali qo'shilmagan", noex:"Bu element uchun mashqlar hali qo'shilmagan",
@@ -271,6 +288,7 @@ const T = {
     lktitle:"Нужна подписка", lkdesc:"Чтобы войти, подпишитесь на наш YouTube-канал. После подписки нажмите «Проверить».",
     lkyt:"Подписаться на канал", lkrecheck:"Проверить подписку", lksignout:"Выйти",
     secel:"Элементы", secmore:"Ещё", hsub:"Подписка активна",
+    betitle:"Все элементы", elstitle:"Элементы",
     bctitle:"Онлайн-соревнование", bcdesc:"Присоединяйтесь в Telegram", bftitle:"Вопросы", bfdesc:"Часто задаваемые вопросы",
     bytitle:"YouTube канал", bydesc:"Подпишитесь, смотрите новые видео",
     noel:"Элементы ещё не добавлены", noex:"Упражнения для этого элемента ещё не добавлены",
@@ -289,6 +307,8 @@ function applyLang(){
   document.getElementById('lg-easy').textContent=DIFF.easy[lang]; document.getElementById('lg-norm').textContent=DIFF.normal[lang]; document.getElementById('lg-hard').textContent=DIFF.hard[lang];
   document.getElementById('sec-elements').textContent=t('secel');
   document.getElementById('sec-more').textContent=t('secmore');
+  document.getElementById('be-title').textContent=t('betitle');
+  document.getElementById('els-title').textContent=t('elstitle');
   document.getElementById('bc-title').textContent=t('bctitle');
   document.getElementById('bc-desc').textContent=t('bcdesc');
   document.getElementById('by-title').textContent=t('bytitle');
@@ -329,6 +349,7 @@ async function loadData(){
 // ================================================================
 function renderAll(){
   if(document.getElementById('s-home').classList.contains('active')) renderElements();
+  if(document.getElementById('s-elements').classList.contains('active')) renderElements();
   if(document.getElementById('s-element').classList.contains('active') && curElement) openElement(curElement);
   if(document.getElementById('s-faq').classList.contains('active')) renderFaq();
 }
@@ -337,6 +358,8 @@ function exField(ex,f){ const k=f+'_'+lang; return (lang==='ru' && ex[k]) ? ex[k
 
 function renderElements(){
   const els = (D.elements||[]).slice().sort((a,b)=>(a.order||0)-(b.order||0));
+  const countTxt = `${els.length} ${lang==='ru'?'элементов':'ta element'}`;
+  const beCount = document.getElementById('be-count'); if(beCount) beCount.textContent = countTxt;
   const grid = document.getElementById('el-grid');
   if(!els.length){ grid.innerHTML = `<div class="el-empty">${t('noel')}</div>`; return; }
   grid.innerHTML = els.map(e=>{
