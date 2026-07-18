@@ -286,7 +286,6 @@ function spin(on,msg){ document.getElementById('spinner').className='spinner'+(o
 function setLang(l){ lang=l; localStorage.setItem('cal_lang',l); document.getElementById('lb-uz').classList.toggle('active',l==='uz'); document.getElementById('lb-ru').classList.toggle('active',l==='ru'); applyLang(); renderAll(); }
 
 function applyLang(){
-  document.getElementById('lv-easy').textContent=DIFF.easy[lang]; document.getElementById('lv-norm').textContent=DIFF.normal[lang]; document.getElementById('lv-hard').textContent=DIFF.hard[lang];
   document.getElementById('lg-easy').textContent=DIFF.easy[lang]; document.getElementById('lg-norm').textContent=DIFF.normal[lang]; document.getElementById('lg-hard').textContent=DIFF.hard[lang];
   document.getElementById('sec-elements').textContent=t('secel');
   document.getElementById('sec-more').textContent=t('secmore');
