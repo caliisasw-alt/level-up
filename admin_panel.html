@@ -142,7 +142,7 @@ body{font-family:'Inter',sans-serif;background:#0f1013;color:#e7e8ec;min-height:
       <button class="ni" onclick="ST('exercises')"><i class="ti ti-dumbbell"></i>Mashqlar</button>
       <button class="ni" onclick="ST('faq')"><i class="ti ti-help-circle"></i>Savollar (FAQ)</button>
       <div class="ns">Sozlamalar</div>
-      <button class="ni" onclick="ST('access')"><i class="ti ti-brand-youtube"></i>YouTube obuna</button>
+      <button class="ni" onclick="ST('access')"><i class="ti ti-brand-youtube"></i>YouTube kanal</button>
       <button class="ni" onclick="ST('competition')"><i class="ti ti-brand-telegram"></i>Onlayn musobaqa</button>
       <button class="ni" onclick="ST('settings')"><i class="ti ti-settings"></i>Ilova / Parol</button>
     </div>
@@ -200,19 +200,15 @@ body{font-family:'Inter',sans-serif;background:#0f1013;color:#e7e8ec;min-height:
       </div>
     </div>
 
-    <!-- ACCESS / YOUTUBE -->
+    <!-- YOUTUBE -->
     <div class="ts" id="t-access">
       <div class="ac">
-        <div class="ach"><div class="act"><i class="ti ti-brand-youtube" style="color:#ff0033"></i>YouTube obuna talabi</div></div>
+        <div class="ach"><div class="act"><i class="ti ti-brand-youtube" style="color:#ff0033"></i>YouTube kanal</div></div>
         <div class="acb">
           <div class="info-note" style="margin-bottom:1rem">
-            Foydalanuvchi Google hisobi bilan kirganda, tizim YouTube Data API orqali uning sizning kanalingizga obuna ekanini haqiqatan tekshiradi. Buning uchun Google Cloud Console'da: (1) YouTube Data API v3'ni yoqing, (2) OAuth 2.0 Client ID (Web application) yarating va ilova joylashgan domenni "Authorized JavaScript origins" ga qo'shing. Batafsil qo'llanma alohida faylda (SETUP_GUIDE.md).
+            Ilova endi hech kimni majburiy obunaga majburlamaydi. Buning o'rniga, asosiy menyuda "YouTube kanal" tugmasi ko'rsatiladi — istagan foydalanuvchi shu orqali kanalingizga o'z ixtiyori bilan o'tib, obuna bo'lishi mumkin.
           </div>
-          <div class="fg"><label class="fl">Google OAuth Client ID</label><input class="inp" id="ac-client-id" placeholder="xxxxxxx.apps.googleusercontent.com"></div>
-          <div class="r2">
-            <div class="fg"><label class="fl">YouTube kanal ID (UC... bilan boshlanadi)</label><input class="inp" id="ac-channel-id" placeholder="UCxxxxxxxxxxxxxxxxxx"></div>
-            <div class="fg"><label class="fl">Kanal obuna havolasi</label><input class="inp" id="ac-channel-url" placeholder="https://www.youtube.com/@sizningkanal"></div>
-          </div>
+          <div class="fg"><label class="fl">Kanal havolasi</label><input class="inp" id="ac-channel-url" placeholder="https://www.youtube.com/@sizningkanal"></div>
           <button class="bs" onclick="saveAccessSettings()"><i class="ti ti-device-floppy"></i>Saqlash</button>
         </div>
       </div>
@@ -264,7 +260,7 @@ body{font-family:'Inter',sans-serif;background:#0f1013;color:#e7e8ec;min-height:
 // ============================================================
 // CONFIG — Apps Script backend URL (bir marta shu yerga joylashtiring)
 // ============================================================
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwIeCRMy4ijTRSzOtvHlTljr_jyWsBNazsJEtDjdBWhDa1EB8ksNyejv_e5tEeApPgR/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxV2Qo32uogf5L_VCn3tw1NeXsUB_Ek48twRy2cYcLM9gXS2rfJ9aR74OefSrn80YbvzA/exec';
 // ============================================================
 let PASS='', curElTab=null, D={};
 const DIFFS = ['easy','normal','hard'];
@@ -327,7 +323,7 @@ function ST(id){
   document.querySelectorAll('.ni').forEach(n=>n.classList.remove('active'));
   document.getElementById('t-'+id).classList.add('active');
   event.currentTarget.classList.add('active');
-  const titles={dash:['Dashboard',"Umumiy ko'rsatkichlar"],elements:['Elementlar',"Yo'nalishlarni boshqarish"],exercises:['Mashqlar',"Elementlar ichidagi mashqlar"],faq:['Savollar (FAQ)',"Ko'p so'raladigan savollar"],access:['YouTube obuna',"Kirish talabini sozlash"],competition:['Onlayn musobaqa',"Telegram havolasi"],settings:['Ilova / Parol',"Umumiy sozlamalar"]};
+  const titles={dash:['Dashboard',"Umumiy ko'rsatkichlar"],elements:['Elementlar',"Yo'nalishlarni boshqarish"],exercises:['Mashqlar',"Elementlar ichidagi mashqlar"],faq:['Savollar (FAQ)',"Ko'p so'raladigan savollar"],access:['YouTube kanal',"Kanal havolasini sozlash"],competition:['Onlayn musobaqa',"Telegram havolasi"],settings:['Ilova / Parol',"Umumiy sozlamalar"]};
   document.getElementById('page-title').textContent=titles[id][0];
   document.getElementById('page-sub').textContent=titles[id][1];
 }
@@ -543,8 +539,6 @@ async function saveFaqAll(){
 // ================================================================
 function fillSettings(){
   const s = D.settings||{};
-  document.getElementById('ac-client-id').value = s.google_client_id||'';
-  document.getElementById('ac-channel-id').value = s.youtube_channel_id||'';
   document.getElementById('ac-channel-url').value = s.youtube_channel_url||'';
   document.getElementById('cp-link').value = s.telegram_competition_link||'';
   document.getElementById('st-name-uz').value = s.app_name_uz||'LEVEL UP';
@@ -552,8 +546,6 @@ function fillSettings(){
 }
 async function saveAccessSettings(){
   const settings = {
-    google_client_id: document.getElementById('ac-client-id').value.trim(),
-    youtube_channel_id: document.getElementById('ac-channel-id').value.trim(),
     youtube_channel_url: document.getElementById('ac-channel-url').value.trim()
   };
   load(true);
