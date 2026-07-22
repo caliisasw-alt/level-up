@@ -563,8 +563,8 @@ function renderExercises(){
   const exs = (D.exercises||[]).filter(x=>String(x.elementId)===String(curElTab)).sort((a,b)=>(a.order||0)-(b.order||0));
   let html='';
   exs.forEach((ex,idx)=>{
-    const stepsUz = (ex.steps_uz||'').split('|').filter(Boolean);
-    const stepsRu = (ex.steps_ru||'').split('|').filter(Boolean);
+    const stepsUz = decodeSteps(ex.steps_uz);
+    const stepsRu = decodeSteps(ex.steps_ru);
     html += `<div class="exb" id="exb-${ex.id}">
       <div class="exb-top">
         <span style="font-family:'Oswald',sans-serif;font-weight:700;color:#f2b134">#${idx+1}</span>
@@ -621,9 +621,16 @@ function renderExercises(){
 }
 function setExTab(id){ curElTab=id; renderExercises(); }
 function exF(id,field,val){ const ex=D.exercises.find(e=>e.id===id); if(ex) ex[field]=val; }
-function updStep(id,l,i,val){ const ex=D.exercises.find(e=>e.id===id); if(!ex) return; const key='steps_'+l; const steps=(ex[key]||'').split('|'); steps[i]=val; ex[key]=steps.join('|'); }
-function addStep(id,l){ const ex=D.exercises.find(e=>e.id===id); if(!ex) return; const key='steps_'+l; const steps=(ex[key]||'').split('|').filter(Boolean); steps.push(''); ex[key]=steps.join('|'); renderExercises(); }
-function rmStep(id,l,i){ const ex=D.exercises.find(e=>e.id===id); if(!ex) return; const key='steps_'+l; const steps=(ex[key]||'').split('|').filter(Boolean); steps.splice(i,1); ex[key]=steps.join('|'); renderExercises(); }
+function updStep(id,l,i,val){ const ex=D.exercises.find(e=>e.id===id); if(!ex) return; const key='steps_'+l; const steps=decodeSteps(ex[key]); steps[i]=val; ex[key]=encodeSteps(steps); }
+function addStep(id,l){ const ex=D.exercises.find(e=>e.id===id); if(!ex) return; const key='steps_'+l; const steps=decodeSteps(ex[key]); steps.push(''); ex[key]=encodeSteps(steps); renderExercises(); }
+function rmStep(id,l,i){ const ex=D.exercises.find(e=>e.id===id); if(!ex) return; const key='steps_'+l; const steps=decodeSteps(ex[key]); steps.splice(i,1); ex[key]=encodeSteps(steps); renderExercises(); }
+// Steps are stored as a single pipe-joined cell in the sheet. A plain join('|') can't
+// tell "no steps" apart from "one empty step" (both would look like ''), which caused
+// a newly-added blank step to vanish immediately on re-render. Encoding with a trailing
+// '|' whenever there's at least one step removes that ambiguity, while staying backward
+// compatible with older data saved without a trailing pipe.
+function encodeSteps(arr){ return arr.length ? arr.join('|')+'|' : ''; }
+function decodeSteps(str){ return str ? String(str).replace(/\|$/,'').split('|') : []; }
 function addExercise(){
   if(!curElTab){ toast('Avval elementni tanlang','red'); return; }
   const exs = (D.exercises||[]).filter(x=>String(x.elementId)===String(curElTab));
