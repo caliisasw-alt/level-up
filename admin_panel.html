@@ -26,12 +26,14 @@ body{font-family:'Inter',sans-serif;background:#0f1013;color:#e7e8ec;min-height:
 
 /* LAYOUT */
 .adm{display:none;min-height:100vh}
-.sb{width:250px;background:#16171c;border-right:1px solid #26282f;position:fixed;top:0;left:0;height:100vh;overflow-y:auto;z-index:30;transition:transform .25s ease}
+.sb{width:250px;background:#16171c;border-right:1px solid #26282f;position:fixed;top:0;left:0;height:100vh;overflow-y:auto;z-index:30;transform:translateX(-100%);transition:transform .25s ease}
+.sb.show{transform:translateX(0);box-shadow:4px 0 24px rgba(0,0,0,.5)}
 .sb-logo{padding:1.25rem 1.5rem;border-bottom:1px solid #26282f;display:flex;align-items:center;gap:.75rem}
 .sb-logo i{font-size:24px;color:#f2b134}
 .sb-logo-text{font-family:'Oswald',sans-serif;font-size:14px;font-weight:700;text-transform:uppercase}
 .sb-logo-sub{font-size:11px;color:#787c86}
-.sb-close{margin-left:auto;width:32px;height:32px;border-radius:9px;background:#1c1e24;border:1px solid #26282f;color:#9a9ea8;display:none;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+.sb-close{margin-left:auto;width:32px;height:32px;border-radius:9px;background:#1c1e24;border:1px solid #26282f;color:#9a9ea8;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+.sb-close:hover{color:#f2b134;border-color:#f2b134}
 .sb-nav{padding:.5rem 0}
 .ns{font-size:10px;font-weight:600;color:#4a4d55;text-transform:uppercase;letter-spacing:.08em;padding:.6rem 1.5rem .2rem}
 .ni{display:flex;align-items:center;gap:.65rem;padding:.6rem 1.4rem;cursor:pointer;color:#9a9ea8;font-size:13px;transition:.15s;border-left:3px solid transparent;width:100%;background:none;border-top:none;border-right:none;border-bottom:none;text-align:left}
@@ -41,10 +43,13 @@ body{font-family:'Inter',sans-serif;background:#0f1013;color:#e7e8ec;min-height:
 .ni-badge{margin-left:auto;background:#ef4a4a;color:#fff;font-size:10px;font-weight:700;padding:1px 6px;border-radius:10px;flex-shrink:0}
 .sb-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:20}
 .sb-overlay.show{display:block}
+.sb-reopen{display:none;position:fixed;top:1rem;left:1rem;width:38px;height:38px;border-radius:9px;background:#1c1e24;border:1px solid #26282f;color:#f2b134;align-items:center;justify-content:center;cursor:pointer;z-index:25;box-shadow:0 4px 14px rgba(0,0,0,.4)}
+.sb-reopen.show{display:flex}
+.sb-reopen:hover{border-color:#f2b134}
 .mtb{display:none;position:sticky;top:0;z-index:15;background:#16171c;border-bottom:1px solid #26282f;padding:.85rem 1rem;align-items:center;gap:.75rem}
 .mtb-burger{width:38px;height:38px;border-radius:9px;background:#1c1e24;border:1px solid #26282f;color:#e7e8ec;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;font-size:19px}
 .mtb-title{font-family:'Oswald',sans-serif;font-size:14px;font-weight:700;text-transform:uppercase}
-.mc{margin-left:250px;padding:1.75rem;min-height:100vh}
+.mc{margin-left:0;padding:1.75rem;min-height:100vh;transition:margin-left .25s ease}
 .top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.75rem;gap:1rem}
 .ptitle{font-family:'Oswald',sans-serif;font-size:22px;font-weight:700;text-transform:uppercase}
 .psub{font-size:13px;color:#787c86;margin-top:3px}
@@ -52,13 +57,16 @@ body{font-family:'Inter',sans-serif;background:#0f1013;color:#e7e8ec;min-height:
 .btn-out:hover{background:#32353d}
 .ts{display:none}.ts.active{display:block}
 
+/* SIDEBAR OPEN — desktop only shifts content over, mobile always overlays */
+@media (min-width: 901px){
+  .adm.sidebar-open .mc{margin-left:250px}
+}
+
 /* RESPONSIVE / MOBILE */
 @media (max-width: 900px){
-  .sb{transform:translateX(-100%)}
-  .sb.show{transform:translateX(0);box-shadow:4px 0 24px rgba(0,0,0,.5)}
-  .sb-close{display:flex}
+  .sb-reopen{display:none !important}
   .mtb{display:flex}
-  .mc{margin-left:0;padding:1rem}
+  .mc{padding:1rem}
   .top{display:none}
   .sg{grid-template-columns:repeat(2,1fr)}
   .r2,.r3{grid-template-columns:1fr}
@@ -187,8 +195,9 @@ body{font-family:'Inter',sans-serif;background:#0f1013;color:#e7e8ec;min-height:
 <!-- ADMIN -->
 <div class="adm" id="adm">
   <div class="sb-overlay" id="sb-overlay" onclick="closeSidebar()"></div>
+  <div class="sb-reopen" id="sb-reopen" onclick="openSidebar()"><i class="ti ti-chevron-right"></i></div>
   <div class="sb" id="sb">
-    <div class="sb-logo"><i class="ti ti-barbell"></i><div><div class="sb-logo-text">Level Up</div><div class="sb-logo-sub">Admin panel</div></div><div class="sb-close" onclick="closeSidebar()"><i class="ti ti-x"></i></div></div>
+    <div class="sb-logo"><i class="ti ti-barbell"></i><div><div class="sb-logo-text">Level Up</div><div class="sb-logo-sub">Admin panel</div></div><div class="sb-close" onclick="closeSidebar()"><i class="ti ti-chevron-left"></i></div></div>
     <div class="sb-nav">
       <div class="ns">Umumiy</div>
       <button class="ni active" onclick="ST('dash')"><i class="ti ti-layout-dashboard"></i>Dashboard</button>
@@ -392,7 +401,8 @@ async function doLogin(){
     load(false);
     if(res && res.ok){
       document.getElementById('cfg-screen').style.display='none';
-      document.getElementById('adm').style.display='flex';
+      document.getElementById('adm').style.display='block';
+      initSidebarState();
       await loadAll();
     } else {
       document.getElementById('cfg-err').style.display='block'; document.getElementById('cfg-err').textContent="Noto'g'ri kod";
@@ -439,19 +449,32 @@ function ST(id){
   document.getElementById('page-sub').textContent=titles[id][1];
   document.getElementById('mtb-title').textContent=titles[id][0];
   if(id==='requests') loadRequests();
-  closeSidebar();
+  if(isMobile()) closeSidebar();
 }
 
 // ================================================================
-// SIDEBAR TOGGLE (mobile)
+// SIDEBAR TOGGLE (works on both desktop and mobile)
 // ================================================================
+function isMobile(){ return window.innerWidth <= 900; }
 function openSidebar(){
   document.getElementById('sb').classList.add('show');
-  document.getElementById('sb-overlay').classList.add('show');
+  document.getElementById('adm').classList.add('sidebar-open');
+  document.getElementById('sb-reopen').classList.remove('show');
+  if(isMobile()) document.getElementById('sb-overlay').classList.add('show');
+  localStorage.setItem('admin_sidebar_state','open');
 }
 function closeSidebar(){
   document.getElementById('sb').classList.remove('show');
+  document.getElementById('adm').classList.remove('sidebar-open');
   document.getElementById('sb-overlay').classList.remove('show');
+  if(!isMobile()) document.getElementById('sb-reopen').classList.add('show');
+  localStorage.setItem('admin_sidebar_state','closed');
+}
+function initSidebarState(){
+  const saved = localStorage.getItem('admin_sidebar_state');
+  if(saved==='closed') closeSidebar();
+  else if(saved==='open') openSidebar();
+  else { if(isMobile()) closeSidebar(); else openSidebar(); }
 }
 
 function renderDash(){
